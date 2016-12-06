@@ -1,15 +1,16 @@
 buildscript {
 
     repositories {
+        jcenter()
         mavenCentral()
     }
     dependencies {
         // Plug-in release notes: http://tools.android.com/tech-docs/new-build-system
-        classpath 'com.android.tools.build:gradle:0.11.+'
+        classpath 'com.android.tools.build:gradle:2.2.2'
     }
 }
 
 task wrapper(type: Wrapper) {
     // See latest Gradle version: http://www.gradle.org/downloads
-    gradleVersion = '1.12'
+    gradleVersion = '2.14.1'
 }

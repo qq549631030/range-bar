@@ -16,6 +16,7 @@ import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 
+import com.edmodo.rangebar.BaseRangeBar;
 import com.edmodo.rangebar.RangeBar;
 
 public class MainActivity extends Activity implements ColorPickerDialog.OnColorChangedListener {
@@ -38,7 +39,7 @@ public class MainActivity extends Activity implements ColorPickerDialog.OnColorC
     private int mThumbColorPressed = DEFAULT_THUMB_COLOR_PRESSED;
 
     // Initializes the RangeBar in the application
-    private RangeBar rangebar;
+    private BaseRangeBar rangebar;
 
     // Saves the state upon rotating the screen/restarting the activity
     @Override
@@ -117,7 +118,7 @@ public class MainActivity extends Activity implements ColorPickerDialog.OnColorC
         thumbColorPressed.setTextColor(HOLO_BLUE);
 
         // Gets the RangeBar
-        rangebar = (RangeBar) findViewById(R.id.rangebar1);
+        rangebar = (BaseRangeBar) findViewById(R.id.rangebar1);
 
         // Setting Index Values -------------------------------
 
@@ -126,9 +127,9 @@ public class MainActivity extends Activity implements ColorPickerDialog.OnColorC
         final EditText rightIndexValue = (EditText) findViewById(R.id.rightIndexValue);
 
         // Sets the display values of the indices
-        rangebar.setOnRangeBarChangeListener(new RangeBar.OnRangeBarChangeListener() {
+        rangebar.setOnRangeBarChangeListener(new BaseRangeBar.OnRangeBarChangeListener() {
             @Override
-            public void onIndexChangeListener(RangeBar rangeBar, int leftThumbIndex, int rightThumbIndex) {
+            public void onIndexChangeListener(BaseRangeBar rangeBar, int leftThumbIndex, int rightThumbIndex) {
 
                 leftIndexValue.setText("" + leftThumbIndex);
                 rightIndexValue.setText("" + rightThumbIndex);

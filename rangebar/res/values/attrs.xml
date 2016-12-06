@@ -3,8 +3,12 @@
     <declare-styleable name="RangeBar">
         <attr name="tickCount" format="integer" />
         <attr name="tickHeight" format="dimension" />
+        <attr name="barBulge" format="dimension" />
         <attr name="barWeight" format="dimension" />
+        <attr name="tickWeight" format="dimension" />
         <attr name="barColor" format="reference|color" />
+        <attr name="tickColor" format="reference|color" />
+        <attr name="tickPadding" format="dimension" />
         <attr name="connectingLineWeight" format="dimension" />
         <attr name="connectingLineColor" format="reference|color" />
         <attr name="thumbRadius" format="dimension" />
