@@ -52,12 +52,6 @@ class Thumb extends BaseThumb {
         super(ctx, y, thumbColorNormal, thumbColorPressed, thumbRadiusDP, thumbImageNormal, thumbImagePressed);
         final Resources res = ctx.getResources();
 
-        mHalfWidthNormal = mImageNormal.getWidth() / 2f;
-        mHalfHeightNormal = mImageNormal.getHeight() / 2f;
-
-        mHalfWidthPressed = mImagePressed.getWidth() / 2f;
-        mHalfHeightPressed = mImagePressed.getHeight() / 2f;
-
         // Sets the minimum touchable area, but allows it to expand based on
         // image size
         int targetRadius = (int) Math.max(MINIMUM_TARGET_RADIUS_DP, thumbRadiusDP);
@@ -65,6 +59,13 @@ class Thumb extends BaseThumb {
         mTargetRadiusPx = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                 targetRadius,
                 res.getDisplayMetrics());
+
+        mHalfWidthNormal = mImageNormal != null ? mImageNormal.getWidth() / 2f : mTargetRadiusPx;
+        mHalfHeightNormal = mImageNormal != null ? mImageNormal.getHeight() / 2f : mTargetRadiusPx;
+
+        mHalfWidthPressed = mImagePressed != null ? mImagePressed.getWidth() / 2f : mTargetRadiusPx;
+        mHalfHeightPressed = mImagePressed != null ? mImagePressed.getHeight() / 2f : mTargetRadiusPx;
+
 
         mX = mHalfWidthNormal;
     }

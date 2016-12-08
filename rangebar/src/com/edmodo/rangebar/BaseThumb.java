@@ -64,10 +64,8 @@ public abstract class BaseThumb {
     public BaseThumb(Context ctx, float y, int thumbColorNormal, int thumbColorPressed, float thumbRadiusDP, int thumbImageNormal, int thumbImagePressed) {
         mY = y;
         final Resources res = ctx.getResources();
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = false;
-        mImageNormal = BitmapFactory.decodeResource(res, thumbImageNormal, options);
-        mImagePressed = BitmapFactory.decodeResource(res, thumbImagePressed, options);
+        mImageNormal = BitmapFactory.decodeResource(res, thumbImageNormal);
+        mImagePressed = BitmapFactory.decodeResource(res, thumbImagePressed);
         // If any of the attributes are set, toggle bitmap off
         if (thumbRadiusDP == -1 && thumbColorNormal == -1 && thumbColorPressed == -1) {
 

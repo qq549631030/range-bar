@@ -32,19 +32,19 @@ public abstract class BaseRangeBar extends View {
     private static final float DEFAULT_BAR_BULGE_PX = 0;
     private static final float DEFAULT_BAR_WEIGHT_PX = 2;
     private static final float DEFAULT_TICK_WEIGHT_PX = 2;
-    private static final int DEFAULT_BAR_COLOR = Color.LTGRAY;
+    private static final int DEFAULT_BAR_COLOR = Color.DKGRAY;
     private static final int DEFAULT_TICK_COLOR = Color.LTGRAY;
     private static final float DEFAULT_CONNECTING_LINE_WEIGHT_PX = 2;
-    private static final int DEFAULT_THUMB_IMAGE_NORMAL = R.drawable.seek_thumb_normal;
-    private static final int DEFAULT_THUMB_IMAGE_PRESSED = R.drawable.seek_thumb_pressed;
+    private static final int DEFAULT_THUMB_IMAGE_NORMAL = -1;
+    private static final int DEFAULT_THUMB_IMAGE_PRESSED = -1;
 
     // Corresponds to android.R.color.holo_blue_light.
     private static final int DEFAULT_CONNECTING_LINE_COLOR = 0xff33b5e5;
 
     // Indicator value tells Thumb.java whether it should draw the circle or not
-    private static final float DEFAULT_THUMB_RADIUS_DP = -1;
-    private static final int DEFAULT_THUMB_COLOR_NORMAL = -1;
-    private static final int DEFAULT_THUMB_COLOR_PRESSED = -1;
+    private static final float DEFAULT_THUMB_RADIUS_DP = 12;
+    private static final int DEFAULT_THUMB_COLOR_NORMAL = 0xff33b5e5;
+    private static final int DEFAULT_THUMB_COLOR_PRESSED = Color.BLUE;
 
     // Instance variables for all of the customizable attributes
     private int mTickCount = DEFAULT_TICK_COUNT;
@@ -550,7 +550,61 @@ public abstract class BaseRangeBar extends View {
         return mRightIndex;
     }
 
-    // Private Methods /////////////////////////////////////////////////////////
+    protected float getDefaultTickHeightPx() {
+        return DEFAULT_TICK_HEIGHT_PX;
+    }
+
+    protected float getDefaultBarBulgePx() {
+        return DEFAULT_BAR_BULGE_PX;
+    }
+
+    protected float getDefaultBarWeightPx() {
+        return DEFAULT_BAR_WEIGHT_PX;
+    }
+
+    protected float getDefaultConnectingLineWeightPx() {
+        return DEFAULT_CONNECTING_LINE_WEIGHT_PX;
+    }
+
+    protected float getDefaultThumbRadiusDp() {
+        return DEFAULT_THUMB_RADIUS_DP;
+    }
+
+    protected float getDefaultTickWeightPx() {
+        return DEFAULT_TICK_WEIGHT_PX;
+    }
+
+    protected int getDefaultBarColor() {
+        return DEFAULT_BAR_COLOR;
+    }
+
+    protected int getDefaultConnectingLineColor() {
+        return DEFAULT_CONNECTING_LINE_COLOR;
+    }
+
+    protected int getDefaultThumbColorNormal() {
+        return DEFAULT_THUMB_COLOR_NORMAL;
+    }
+
+    protected int getDefaultThumbColorPressed() {
+        return DEFAULT_THUMB_COLOR_PRESSED;
+    }
+
+    protected int getDefaultThumbImageNormal() {
+        return DEFAULT_THUMB_IMAGE_NORMAL;
+    }
+
+    protected int getDefaultThumbImagePressed() {
+        return DEFAULT_THUMB_IMAGE_PRESSED;
+    }
+
+    protected int getDefaultTickColor() {
+        return DEFAULT_TICK_COLOR;
+    }
+
+    protected int getDefaultTickCount() {
+        return DEFAULT_TICK_COUNT;
+    }
 
     /**
      * Does all the functions of the constructor for RangeBar. Called by both
@@ -567,7 +621,7 @@ public abstract class BaseRangeBar extends View {
 
             // Sets the values of the user-defined attributes based on the XML
             // attributes.
-            final Integer tickCount = ta.getInteger(R.styleable.BaseRangeBar_tickCount, DEFAULT_TICK_COUNT);
+            final Integer tickCount = ta.getInteger(R.styleable.BaseRangeBar_tickCount, getDefaultTickCount());
 
             if (isValidTickCount(tickCount)) {
 
@@ -586,25 +640,25 @@ public abstract class BaseRangeBar extends View {
                 Log.e(TAG, "tickCount less than 2; invalid tickCount. XML input ignored.");
             }
 
-            mTickHeight = ta.getDimension(R.styleable.BaseRangeBar_tickHeight, DEFAULT_TICK_HEIGHT_PX);
-            mBarBulge = ta.getDimension(R.styleable.BaseRangeBar_barBulge, DEFAULT_BAR_BULGE_PX);
+            mTickHeight = ta.getDimension(R.styleable.BaseRangeBar_tickHeight, getDefaultTickHeightPx());
+            mBarBulge = ta.getDimension(R.styleable.BaseRangeBar_barBulge, getDefaultBarBulgePx());
 
-            mBarWeight = ta.getDimension(R.styleable.BaseRangeBar_barWeight, DEFAULT_BAR_WEIGHT_PX);
-            mBarColor = ta.getColor(R.styleable.BaseRangeBar_barColor, DEFAULT_BAR_COLOR);
-            mTickWeight = ta.getDimension(R.styleable.BaseRangeBar_tickWeight, DEFAULT_TICK_WEIGHT_PX);
-            mTickColor = ta.getColor(R.styleable.BaseRangeBar_tickColor, DEFAULT_TICK_COLOR);
+            mBarWeight = ta.getDimension(R.styleable.BaseRangeBar_barWeight, getDefaultBarWeightPx());
+            mBarColor = ta.getColor(R.styleable.BaseRangeBar_barColor, getDefaultBarColor());
+            mTickWeight = ta.getDimension(R.styleable.BaseRangeBar_tickWeight, getDefaultTickWeightPx());
+            mTickColor = ta.getColor(R.styleable.BaseRangeBar_tickColor, getDefaultTickColor());
             mConnectingLineWeight = ta.getDimension(R.styleable.BaseRangeBar_connectingLineWeight,
-                    DEFAULT_CONNECTING_LINE_WEIGHT_PX);
+                    getDefaultConnectingLineWeightPx());
             mConnectingLineColor = ta.getColor(R.styleable.BaseRangeBar_connectingLineColor,
-                    DEFAULT_CONNECTING_LINE_COLOR);
-            mThumbRadiusDP = ta.getDimension(R.styleable.BaseRangeBar_thumbRadius, DEFAULT_THUMB_RADIUS_DP);
+                    getDefaultConnectingLineColor());
+            mThumbRadiusDP = ta.getDimension(R.styleable.BaseRangeBar_thumbRadius, getDefaultThumbRadiusDp());
             mThumbImageNormal = ta.getResourceId(R.styleable.BaseRangeBar_thumbImageNormal,
-                    DEFAULT_THUMB_IMAGE_NORMAL);
+                    getDefaultThumbImageNormal());
             mThumbImagePressed = ta.getResourceId(R.styleable.BaseRangeBar_thumbImagePressed,
-                    DEFAULT_THUMB_IMAGE_PRESSED);
-            mThumbColorNormal = ta.getColor(R.styleable.BaseRangeBar_thumbColorNormal, DEFAULT_THUMB_COLOR_NORMAL);
+                    getDefaultThumbImagePressed());
+            mThumbColorNormal = ta.getColor(R.styleable.BaseRangeBar_thumbColorNormal, getDefaultThumbColorNormal());
             mThumbColorPressed = ta.getColor(R.styleable.BaseRangeBar_thumbColorPressed,
-                    DEFAULT_THUMB_COLOR_PRESSED);
+                    getDefaultThumbColorPressed());
             initOtherAttribute(ta);
         } finally {
 

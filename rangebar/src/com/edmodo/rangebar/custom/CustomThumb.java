@@ -126,7 +126,8 @@ public class CustomThumb extends BaseThumb {
 
     @Override
     public boolean isInTargetZone(float x, float y) {
-        if (Math.abs(x - mX) <= maxHalfWidth && y >= mY - mThumbLineHeight / 2f && y <= mY + mThumbLineHeight / 2f + mImageNormal.getHeight()) {
+        float thumbHeight = mImageNormal != null ? mImageNormal.getHeight() : mThumbRadiusPx;
+        if (Math.abs(x - mX) <= maxHalfWidth && y >= mY - mThumbLineHeight / 2f && y <= mY + mThumbLineHeight / 2f + thumbHeight) {
             return true;
         }
         return false;
@@ -185,14 +186,16 @@ public class CustomThumb extends BaseThumb {
     }
 
     protected void drawImage(Canvas canvas, Bitmap bitmap, boolean isPressed) {
-        canvas.drawBitmap(bitmap, mX - bitmap.getWidth() / 2f, mY + mThumbLineHeight / 2f, null);
+        if (bitmap != null) {
+            canvas.drawBitmap(bitmap, mX - bitmap.getWidth() / 2f, mY + mThumbLineHeight / 2f, null);
+        }
     }
 
     protected void drawColor(Canvas canvas, boolean isPressed) {
         if (isPressed)
-            canvas.drawCircle(mX, mY, mThumbRadiusPx, mPaintPressed);
+            canvas.drawCircle(mX, mY + mThumbLineHeight / 2f + mThumbRadiusPx, mThumbRadiusPx, mPaintPressed);
         else
-            canvas.drawCircle(mX, mY, mThumbRadiusPx, mPaintNormal);
+            canvas.drawCircle(mX, mY + mThumbLineHeight / 2f + mThumbRadiusPx, mThumbRadiusPx, mPaintNormal);
     }
 
     @Override

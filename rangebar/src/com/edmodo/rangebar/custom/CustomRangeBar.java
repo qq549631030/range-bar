@@ -19,26 +19,33 @@ import com.edmodo.rangebar.R;
 
 public class CustomRangeBar extends BaseRangeBar {
 
-    private static final float DEFAULT_TICK_HEIGHT_PX = 48;
+    private static final float DEFAULT_BAR_BULGE_PX = 8;
+    private static final float DEFAULT_BAR_WEIGHT_PX = 8;
+    private static final float DEFAULT_TICK_WEIGHT_PX = 4;
+    private static final int DEFAULT_BAR_COLOR = Color.LTGRAY;
+    private static final int DEFAULT_TICK_COUNT = 11;
+    private static final float DEFAULT_TICK_HEIGHT_PX = 12;
+    private static final int DEFAULT_TICK_COLOR = Color.LTGRAY;
+    private static final float DEFAULT_CONNECTING_LINE_WEIGHT_PX = 8;
 
 
     private static final float DEFAULT_TICK_PADDING_DP = 5;
     private static final float DEFAULT_SCALE_TEXT_SIZE_SP = 12;
     private static final int DEFAULT_SCALE_TEXT_COLOR = Color.WHITE;
-    private static final int DEFAULT_PIN_BG_COLOR = Color.BLUE;
+    private static final int DEFAULT_PIN_BG_COLOR = 0xff33b5e5;
     private static final int DEFAULT_PIN_TEXT_COLOR = Color.WHITE;
-    private static final int DEFAULT_THUMB_LINE_COLOR = Color.BLUE;
+    private static final int DEFAULT_THUMB_LINE_COLOR = Color.CYAN;
     private static final int DEFAULT_PIN_BG_RES = 0;
     private static final float DEFAULT_PIN_TEXT_PADDING_LEFT_DP = 3;
     private static final float DEFAULT_PIN_TEXT_PADDING_TOP_DP = 3;
     private static final float DEFAULT_PIN_TEXT_PADDING_RIGHT_DP = 3;
-    private static final float DEFAULT_PIN_TEXT_PADDING_BOTTOM_DP = 10;
+    private static final float DEFAULT_PIN_TEXT_PADDING_BOTTOM_DP = 8;
     private static final float DEFAULT_PIN_MARGIN_BOTTOM_DP = 10;
     private static final float DEFAULT_PIN_TEXT_SIZE_SP = 12;
     private static final int DEFAULT_PIN_TEXT_LENGTH = 4;
 
-    private static final float DEFAULT_THUMB_LINE_HEIGHT_PX = 40;
-    private static final float DEFAULT_THUMB_LINE_WEIGHT_PX = 2;
+    private static final float DEFAULT_THUMB_LINE_HEIGHT_PX = 80;
+    private static final float DEFAULT_THUMB_LINE_WEIGHT_PX = 4;
 
     private float mTickPaddingDP = DEFAULT_TICK_PADDING_DP;
     private float mScaleTextSizeSp = DEFAULT_SCALE_TEXT_SIZE_SP;
@@ -94,6 +101,46 @@ public class CustomRangeBar extends BaseRangeBar {
         } finally {
             ta.recycle();
         }
+    }
+
+    @Override
+    public int getDefaultTickCount() {
+        return DEFAULT_TICK_COUNT;
+    }
+
+    @Override
+    public float getDefaultBarBulgePx() {
+        return DEFAULT_BAR_BULGE_PX;
+    }
+
+    @Override
+    public float getDefaultBarWeightPx() {
+        return DEFAULT_BAR_WEIGHT_PX;
+    }
+
+    @Override
+    public int getDefaultBarColor() {
+        return DEFAULT_BAR_COLOR;
+    }
+
+    @Override
+    public float getDefaultTickWeightPx() {
+        return DEFAULT_TICK_WEIGHT_PX;
+    }
+
+    @Override
+    public float getDefaultTickHeightPx() {
+        return DEFAULT_TICK_HEIGHT_PX;
+    }
+
+    @Override
+    public int getDefaultTickColor() {
+        return DEFAULT_TICK_COLOR;
+    }
+
+    @Override
+    public float getDefaultConnectingLineWeightPx() {
+        return DEFAULT_CONNECTING_LINE_WEIGHT_PX;
     }
 
     @Override
