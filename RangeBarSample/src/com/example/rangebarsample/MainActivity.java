@@ -4,11 +4,9 @@ package com.example.rangebarsample;
 import android.app.Activity;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,7 +15,9 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 
 import com.edmodo.rangebar.BaseRangeBar;
-import com.edmodo.rangebar.RangeBar;
+import com.edmodo.rangebar.custom.CustomRangeBar;
+import com.edmodo.rangebar.IRangeBarFormatter;
+import com.edmodo.rangebar.normal.RangeBar;
 
 public class MainActivity extends Activity implements ColorPickerDialog.OnColorChangedListener {
 
@@ -69,7 +69,12 @@ public class MainActivity extends Activity implements ColorPickerDialog.OnColorC
 
         // Gets the RangeBar
         rangebar = (RangeBar) findViewById(R.id.rangebar1);
-
+        rangebar.setFormatter(new IRangeBarFormatter() {
+            @Override
+            public String format(int tickIndex) {
+                return String.valueOf(tickIndex * 5) + "%";
+            }
+        });
         // Gets the index value TextViews
         final TextView leftIndexValue = (TextView) findViewById(R.id.leftIndexValue);
         final TextView rightIndexValue = (TextView) findViewById(R.id.rightIndexValue);
@@ -102,14 +107,14 @@ public class MainActivity extends Activity implements ColorPickerDialog.OnColorC
         final Button thumbColorPressed = (Button) findViewById(R.id.thumbColorPressed);
         final Button resetThumbColors = (Button) findViewById(R.id.resetThumbColors);
         final Button refreshButton = (Button) findViewById(R.id.refresh);
-        
+
         //Sets the buttons to bold.
-        refreshButton.setTypeface(font,Typeface.BOLD);
-        barColor.setTypeface(font,Typeface.BOLD);
-        connectingLineColor.setTypeface(font,Typeface.BOLD);
-        thumbColorNormal.setTypeface(font,Typeface.BOLD);
-        thumbColorPressed.setTypeface(font,Typeface.BOLD);
-        resetThumbColors.setTypeface(font,Typeface.BOLD);
+        refreshButton.setTypeface(font, Typeface.BOLD);
+        barColor.setTypeface(font, Typeface.BOLD);
+        connectingLineColor.setTypeface(font, Typeface.BOLD);
+        thumbColorNormal.setTypeface(font, Typeface.BOLD);
+        thumbColorPressed.setTypeface(font, Typeface.BOLD);
+        resetThumbColors.setTypeface(font, Typeface.BOLD);
 
         // Sets initial colors for the Color buttons
         barColor.setTextColor(DEFAULT_BAR_COLOR);
@@ -120,6 +125,16 @@ public class MainActivity extends Activity implements ColorPickerDialog.OnColorC
         // Gets the RangeBar
         rangebar = (BaseRangeBar) findViewById(R.id.rangebar1);
 
+        ((CustomRangeBar) rangebar).setFormatter(new IRangeBarFormatter() {
+            @Override
+            public String format(int tickIndex) {
+                if (tickIndex == 21) {
+                    return "不限";
+                } else {
+                    return String.valueOf(tickIndex * 10) + "%";
+                }
+            }
+        });
         // Setting Index Values -------------------------------
 
         // Gets the index value TextViews
@@ -147,8 +162,7 @@ public class MainActivity extends Activity implements ColorPickerDialog.OnColorC
                 // Catches any IllegalArgumentExceptions; if fails, should throw
                 // a dialog warning the user
                 try {
-                    if (!leftIndex.isEmpty() && !rightIndex.isEmpty())
-                    {
+                    if (!leftIndex.isEmpty() && !rightIndex.isEmpty()) {
                         int leftIntIndex = Integer.parseInt(leftIndex);
                         int rightIntIndex = Integer.parseInt(rightIndex);
                         rangebar.setThumbIndices(leftIntIndex, rightIntIndex);
@@ -249,8 +263,7 @@ public class MainActivity extends Activity implements ColorPickerDialog.OnColorC
                 if (progress == 0) {
                     rangebar.setThumbRadius(-1);
                     thumbRadius.setText("thumbRadius = N/A");
-                }
-                else {
+                } else {
                     rangebar.setThumbRadius(progress);
                     thumbRadius.setText("thumbRadius = " + progress);
                 }
@@ -316,17 +329,16 @@ public class MainActivity extends Activity implements ColorPickerDialog.OnColorC
 
     /**
      * Sets the changed color using the ColorPickerDialog.
-     * 
+     *
      * @param component Component specifying which input is being used
-     * @param newColor Integer specifying the new color to be selected.
+     * @param newColor  Integer specifying the new color to be selected.
      */
     @Override
     public void colorChanged(Component component, int newColor) {
 
         String hexColor = String.format("#%06X", (0xFFFFFF & newColor));
 
-        switch (component)
-        {
+        switch (component) {
             case BAR_COLOR:
                 mBarColor = newColor;
                 rangebar.setBarColor(newColor);
@@ -351,8 +363,7 @@ public class MainActivity extends Activity implements ColorPickerDialog.OnColorC
                 if (newColor == -1) {
                     thumbColorNormalText.setText("thumbColorNormal = N/A");
                     thumbColorNormalText.setTextColor(HOLO_BLUE);
-                }
-                else {
+                } else {
                     thumbColorNormalText.setText("thumbColorNormal = " + hexColor);
                     thumbColorNormalText.setTextColor(newColor);
                 }
@@ -366,8 +377,7 @@ public class MainActivity extends Activity implements ColorPickerDialog.OnColorC
                 if (newColor == -1) {
                     thumbColorPressedText.setText("thumbColorPressed = N/A");
                     thumbColorPressedText.setTextColor(HOLO_BLUE);
-                }
-                else {
+                } else {
                     thumbColorPressedText.setText("thumbColorPressed = " + hexColor);
                     thumbColorPressedText.setTextColor(newColor);
                 }
@@ -400,18 +410,17 @@ public class MainActivity extends Activity implements ColorPickerDialog.OnColorC
 
     /**
      * Initiates the colorPicker from within a button function.
-     * 
-     * @param component Component specifying which input is being used
+     *
+     * @param component    Component specifying which input is being used
      * @param initialColor Integer specifying the initial color choice. *
      * @param defaultColor Integer specifying the default color choice.
      */
-    private void initColorPicker(Component component, int initialColor, int defaultColor)
-    {
+    private void initColorPicker(Component component, int initialColor, int defaultColor) {
         ColorPickerDialog colorPicker = new ColorPickerDialog(this,
-                                                              this,
-                                                              component,
-                                                              initialColor,
-                                                              defaultColor);
+                this,
+                component,
+                initialColor,
+                defaultColor);
         colorPicker.show();
 
     }

@@ -11,12 +11,14 @@
  * governing permissions and limitations under the License. 
  */
 
-package com.edmodo.rangebar;
+package com.edmodo.rangebar.normal;
 
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.TypedValue;
+
+import com.edmodo.rangebar.BaseBar;
 
 /**
  * This class represents the underlying gray bar in the RangeBar (without the

@@ -23,14 +23,24 @@
             android:text="@string/title"
             android:textSize="40sp" />
 
-        <com.edmodo.rangebar.CustomRangeBar
+        <com.edmodo.rangebar.custom.CustomRangeBar
             xmlns:custom="http://schemas.android.com/apk/res-auto"
             android:id="@+id/rangebar1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="50dp"
             android:layout_marginTop="50dp"
-            custom:tickCount="7" />
+            custom:thumbImageNormal="@drawable/seek_thumb"
+            custom:thumbImagePressed="@drawable/seek_thumb"
+            custom:barBulge="4dp"
+            custom:barWeight="6dp"
+            custom:tickHeight="6dp"
+            custom:tickWeight="1dp"
+            custom:connectingLineWeight="6dp"
+            custom:thumbLineHeight="30dp"
+            custom:thumbLineWeight="2dp"
+            custom:thumbLineColor="#FF0000"
+            custom:tickCount="22" />
 
         <LinearLayout
             android:layout_width="match_parent"

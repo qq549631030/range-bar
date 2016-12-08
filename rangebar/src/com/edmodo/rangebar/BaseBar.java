@@ -33,31 +33,31 @@ public class BaseBar {
 
     protected final float mTickHeight;
 
+    protected IRangeBarFormatter formatter;
+
     // Constructor /////////////////////////////////////////////////////////////
 
 
-    BaseBar(Context ctx,
-            float x,
-            float y,
-            float length,
-            float bulgeLength,
-            int tickCount,
-            float tickHeightDP,
-            float barWeight,
-            float tickWeight,
-            int barColor,
-            int tickColor) {
+    public BaseBar(Context ctx,
+                   float x,
+                   float y,
+                   float length,
+                   float barBulge,
+                   int tickCount,
+                   float tickHeight,
+                   float barWeight,
+                   float tickWeight,
+                   int barColor,
+                   int tickColor) {
         mBarLeftX = x;
         mBarRightX = x + length;
-        mLeftX = x + bulgeLength;
-        mRightX = x + length - bulgeLength;
+        mLeftX = x + barBulge;
+        mRightX = x + length - barBulge;
         mY = y;
 
         mNumSegments = tickCount - 1;
-        mTickDistance = (length - bulgeLength * 2) / mNumSegments;
-        mTickHeight = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-                tickHeightDP,
-                ctx.getResources().getDisplayMetrics());
+        mTickDistance = (length - barBulge * 2) / mNumSegments;
+        mTickHeight = tickHeight;
         // Initialize the paint.
         mBarPaint = new Paint();
         mBarPaint.setColor(barColor);
@@ -77,6 +77,10 @@ public class BaseBar {
 
     protected void initTickPaint(Paint paint) {
 
+    }
+
+    public void setFormatter(IRangeBarFormatter formatter) {
+        this.formatter = formatter;
     }
 
     public void draw(Canvas canvas) {
@@ -111,7 +115,7 @@ public class BaseBar {
      * @param x the x-coordinate to find the nearest tick for
      * @return the x-coordinate of the nearest tick
      */
-    public float getNearestTickCoordinate(Thumb thumb) {
+    public float getNearestTickCoordinate(BaseThumb thumb) {
 
         final int nearestTickIndex = getNearestTickIndex(thumb);
 
@@ -126,7 +130,7 @@ public class BaseBar {
      * @param thumb the Thumb to find the nearest tick for
      * @return the zero-based index of the nearest tick
      */
-    public int getNearestTickIndex(Thumb thumb) {
+    public int getNearestTickIndex(BaseThumb thumb) {
 
         int index = (int) ((thumb.getX() - mLeftX + mTickDistance / 2f) / mTickDistance);
         if (index < 0) {
@@ -163,5 +167,9 @@ public class BaseBar {
      */
     protected void drawTicks(Canvas canvas) {
 
+    }
+
+    public int measureMinHeight() {
+        return -1;
     }
 }

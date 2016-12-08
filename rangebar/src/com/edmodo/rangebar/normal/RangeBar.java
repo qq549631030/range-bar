@@ -11,10 +11,14 @@
  * governing permissions and limitations under the License. 
  */
 
-package com.edmodo.rangebar;
+package com.edmodo.rangebar.normal;
 
 import android.content.Context;
 import android.util.AttributeSet;
+
+import com.edmodo.rangebar.BaseBar;
+import com.edmodo.rangebar.BaseRangeBar;
+import com.edmodo.rangebar.BaseThumb;
 
 /**
  * The RangeBar is a double-sided version of a {@link android.widget.SeekBar}
@@ -41,7 +45,17 @@ public class RangeBar extends BaseRangeBar {
     }
 
     @Override
-    protected BaseBar createBar(Context ctx, float marginLeft, float yPos, float barLength, int tickCount, float tickHeightDP, float barWeight, int barColor, float tickWeight, int tickColor) {
+    protected BaseBar createBar(Context ctx, float marginLeft, float yPos, float barLength, float barBulge, int tickCount, float tickHeightDP, float barWeight, int barColor, float tickWeight, int tickColor) {
         return new Bar(ctx, marginLeft, yPos, barLength, tickCount, tickHeightDP, barWeight, barColor);
+    }
+
+    @Override
+    protected ConnectingLine createConnectingLine(Context ctx, float yPos, float connectingLineWeight, int connectingLineColor) {
+        return new ConnectingLine(ctx, yPos, connectingLineWeight, connectingLineColor);
+    }
+
+    @Override
+    protected BaseThumb createThumb(Context ctx, float yPos, int thumbColorNormal, int thumbColorPressed, float thumbRadiusDP, int thumbImageNormal, int thumbImagePressed) {
+        return new Thumb(ctx, yPos, thumbColorNormal, thumbColorPressed, thumbRadiusDP, thumbImageNormal, thumbImagePressed);
     }
 }

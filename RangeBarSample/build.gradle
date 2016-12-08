@@ -6,12 +6,12 @@ dependencies {
 
 android {
 
-    compileSdkVersion 19
-    buildToolsVersion "19.1"
+    compileSdkVersion 25
+    buildToolsVersion "23.0.3"
 
     defaultConfig {
-        minSdkVersion 7
-        targetSdkVersion 19
+        minSdkVersion 14
+        targetSdkVersion 22
     }
 
     sourceSets {
@@ -23,6 +23,7 @@ android {
             renderscript.srcDirs = ['src']
             res.srcDirs = ['res']
             assets.srcDirs = ['assets']
+            jniLibs.srcDirs = ['libs']
         }
     }
 }

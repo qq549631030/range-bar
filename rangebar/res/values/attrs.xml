@@ -1,21 +1,44 @@
 <resources>
 
-    <declare-styleable name="RangeBar">
-        <attr name="tickCount" format="integer" />
-        <attr name="tickHeight" format="dimension" />
-        <attr name="barBulge" format="dimension" />
-        <attr name="barWeight" format="dimension" />
-        <attr name="tickWeight" format="dimension" />
-        <attr name="barColor" format="reference|color" />
-        <attr name="tickColor" format="reference|color" />
-        <attr name="tickPadding" format="dimension" />
-        <attr name="connectingLineWeight" format="dimension" />
-        <attr name="connectingLineColor" format="reference|color" />
-        <attr name="thumbRadius" format="dimension" />
-        <attr name="thumbImageNormal" format="reference" />
-        <attr name="thumbImagePressed" format="reference" />
+    <declare-styleable name="BaseRangeBar">
+        <attr name="tickCount" format="integer"/>
+        <attr name="tickHeight" format="dimension"/>
+        <attr name="barWeight" format="dimension"/>
+        <attr name="barColor" format="reference|color"/>
+        <attr name="connectingLineWeight" format="dimension"/>
+        <attr name="connectingLineColor" format="reference|color"/>
+        <attr name="thumbRadius" format="dimension"/>
+        <attr name="thumbImageNormal" format="reference"/>
+        <attr name="thumbImagePressed" format="reference"/>
         <attr name="thumbColorNormal" format="reference|color"/>
         <attr name="thumbColorPressed" format="reference|color"/>
+
+        <attr name="barBulge" format="dimension"/>
+        <attr name="tickWeight" format="dimension"/>
+        <attr name="tickColor" format="reference|color"/>
     </declare-styleable>
 
+    <declare-styleable name="CustomRangeBar">
+
+        <attr name="tickPadding" format="dimension"/>
+        <attr name="scaleTextColor" format="reference|color"/>
+        <attr name="scaleTextSize" format="dimension"/>
+
+        <attr name="pinBgRes" format="reference"/>
+        <attr name="pinBgColor" format="reference|color"/>
+        <attr name="pinTextPaddingLeft" format="dimension"/>
+        <attr name="pinTextPaddingTop" format="dimension"/>
+        <attr name="pinTextPaddingRight" format="dimension"/>
+        <attr name="pinTextPaddingBottom" format="dimension"/>
+        <attr name="pinMarginBottom" format="dimension"/>
+        <attr name="pinTextColor" format="reference|color"/>
+        <attr name="pinTextSize" format="dimension"/>
+        <attr name="maxPinTextLength" format="integer"/>
+
+        <attr name="thumbPinBg" format="reference"/>
+        <attr name="thumbLineHeight" format="dimension"/>
+        <attr name="thumbLineWeight" format="dimension"/>
+        <attr name="thumbLineColor" format="reference|color"/>
+
+    </declare-styleable>
 </resources>
