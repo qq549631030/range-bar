@@ -98,7 +98,7 @@ class Thumb extends BaseThumb {
     }
 
     @Override
-    protected void drawByBitmap(Canvas canvas, Bitmap bitmap, boolean isPressed) {
+    protected void drawByBitmap(Canvas canvas, Bitmap bitmap, float leftX, float rightX, boolean isPressed) {
         if (isPressed) {
             final float topPressed = mY - mHalfHeightPressed;
             final float leftPressed = mX - mHalfWidthPressed;
@@ -111,7 +111,7 @@ class Thumb extends BaseThumb {
     }
 
     @Override
-    protected void drawByColor(Canvas canvas, boolean isPressed) {
+    protected void drawByColor(Canvas canvas, float leftX, float rightX, boolean isPressed) {
         if (isPressed)
             canvas.drawCircle(mX, mY, mThumbRadiusPx, mPaintPressed);
         else

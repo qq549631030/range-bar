@@ -19,6 +19,9 @@ import com.edmodo.rangebar.R;
 
 public class CustomRangeBar extends BaseRangeBar {
 
+    private static final float DEFAULT_TICK_HEIGHT_PX = 48;
+
+
     private static final float DEFAULT_TICK_PADDING_DP = 5;
     private static final float DEFAULT_SCALE_TEXT_SIZE_SP = 12;
     private static final int DEFAULT_SCALE_TEXT_COLOR = Color.WHITE;
@@ -67,6 +70,7 @@ public class CustomRangeBar extends BaseRangeBar {
 
     public CustomRangeBar(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.CustomRangeBar, 0, 0);
         try {
             mTickPaddingDP = ta.getDimension(R.styleable.CustomRangeBar_tickPadding, DEFAULT_TICK_PADDING_DP);

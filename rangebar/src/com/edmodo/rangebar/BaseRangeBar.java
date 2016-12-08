@@ -228,7 +228,7 @@ public abstract class BaseRangeBar extends View {
         // Create the underlying bar.
         final float marginLeft = mLeftThumb.getHalfWidth();
         final float barLength = w - 2 * marginLeft;
-        mBar = createBar(ctx, marginLeft, yPos, barLength,mBarBulge, mTickCount, mTickHeight, mBarWeight, mBarColor, mTickWeight, mTickColor);
+        mBar = createBar(ctx, marginLeft, yPos, barLength, mBarBulge, mTickCount, mTickHeight, mBarWeight, mBarColor, mTickWeight, mTickColor);
         mBar.setFormatter(mFormatter);
         // Initialize thumbs to the desired indices
 
@@ -253,7 +253,7 @@ public abstract class BaseRangeBar extends View {
         }
 
         // Create the line connecting the two thumbs.
-        mConnectingLine = createConnectingLine(ctx,yPos,mConnectingLineWeight,mConnectingLineColor);
+        mConnectingLine = createConnectingLine(ctx, yPos, mConnectingLineWeight, mConnectingLineColor);
     }
 
     @Override
@@ -265,8 +265,8 @@ public abstract class BaseRangeBar extends View {
 
         mConnectingLine.draw(canvas, mLeftThumb, mRightThumb);
 
-        mLeftThumb.draw(canvas);
-        mRightThumb.draw(canvas);
+        mLeftThumb.draw(canvas, mLeftThumb.getX(), mRightThumb.getX());
+        mRightThumb.draw(canvas, mLeftThumb.getX(), mRightThumb.getX());
 
     }
 
@@ -312,11 +312,12 @@ public abstract class BaseRangeBar extends View {
     public void setOnRangeBarChangeListener(OnRangeBarChangeListener listener) {
         mListener = listener;
     }
+
     /**
      * Sets a listener to modify the text
      *
      * @param formatter the RangeBar pin text notification listener; null to remove any
-     *                         existing listener
+     *                  existing listener
      */
     public void setFormatter(IRangeBarFormatter formatter) {
         this.mFormatter = formatter;
@@ -612,7 +613,7 @@ public abstract class BaseRangeBar extends View {
 
     }
 
-    protected void initOtherAttribute(TypedArray ta){
+    protected void initOtherAttribute(TypedArray ta) {
 
     }
 
@@ -633,11 +634,11 @@ public abstract class BaseRangeBar extends View {
      */
     private void createConnectingLine() {
 
-        mConnectingLine = createConnectingLine(getContext(),getYPos(),mConnectingLineWeight,mConnectingLineColor);
+        mConnectingLine = createConnectingLine(getContext(), getYPos(), mConnectingLineWeight, mConnectingLineColor);
         invalidate();
     }
 
-    protected abstract BaseConnectingLine createConnectingLine(Context ctx,float yPos,float connectingLineWeight,int connectingLineColor);
+    protected abstract BaseConnectingLine createConnectingLine(Context ctx, float yPos, float connectingLineWeight, int connectingLineColor);
 
     /**
      * Creates two new Thumbs.
@@ -879,7 +880,7 @@ public abstract class BaseRangeBar extends View {
         if (mFormatter != null) {
             return mFormatter.format(tickIndex);
         }
-       return String.valueOf(tickIndex);
+        return String.valueOf(tickIndex);
     }
 
     // Inner Classes ///////////////////////////////////////////////////////////

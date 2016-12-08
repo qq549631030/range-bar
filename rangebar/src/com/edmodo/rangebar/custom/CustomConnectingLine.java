@@ -25,6 +25,9 @@ public class CustomConnectingLine extends BaseConnectingLine {
 
     @Override
     public void draw(Canvas canvas, BaseThumb leftThumb, BaseThumb rightThumb) {
-        canvas.drawLine(leftThumb.getX() + mConnectingLineWeight / 2f + thumbLineWeight / 2f, mY, rightThumb.getX() - mConnectingLineWeight / 2f - thumbLineWeight / 2f, mY, mPaint);
+        float minGap = mConnectingLineWeight;
+        if (Math.abs(rightThumb.getX() - leftThumb.getX()) >= minGap) {
+            canvas.drawLine(leftThumb.getX() + mConnectingLineWeight / 2f + thumbLineWeight / 2f, mY, rightThumb.getX() - mConnectingLineWeight / 2f - thumbLineWeight / 2f, mY, mPaint);
+        }
     }
 }

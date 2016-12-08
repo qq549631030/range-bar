@@ -126,42 +126,56 @@ public class CustomThumb extends BaseThumb {
 
     @Override
     public boolean isInTargetZone(float x, float y) {
-        if (Math.abs(x - mX) <= (mImageNormal.getWidth() / 2f) && Math.abs(y - (mY + (mThumbLineHeight / 2.0f) + (mImageNormal.getHeight() / 2f))) <= (mImageNormal.getHeight() / 2f)) {
+        if (Math.abs(x - mX) <= maxHalfWidth && y >= mY - mThumbLineHeight / 2f && y <= mY + mThumbLineHeight / 2f + mImageNormal.getHeight()) {
             return true;
         }
         return false;
     }
 
     @Override
-    protected void drawByBitmap(Canvas canvas, Bitmap bitmap, boolean isPressed) {
-        drawPin(canvas);
+    protected void drawByBitmap(Canvas canvas, Bitmap bitmap, float leftX, float rightX, boolean isPressed) {
+        drawPin(canvas, leftX, rightX);
         drawLine(canvas);
         drawImage(canvas, bitmap, isPressed);
     }
 
     @Override
-    protected void drawByColor(Canvas canvas, boolean isPressed) {
-        drawPin(canvas);
+    protected void drawByColor(Canvas canvas, float leftX, float rightX, boolean isPressed) {
+        drawPin(canvas, leftX, rightX);
         drawLine(canvas);
         drawColor(canvas, isPressed);
     }
 
-    protected void drawPin(Canvas canvas) {
+    protected void drawPin(Canvas canvas, float leftX, float rightX) {
+        float centerX = mX;
         if (pinBgUseColor) {
+            //画小三角
             Path path = new Path();
             path.moveTo(mX, mY - mThumbLineHeight / 2f - pinMarginBottom);
             path.lineTo(mX + 7, mY - mThumbLineHeight / 2f - pinMarginBottom - 11);
             path.lineTo(mX - 7, mY - mThumbLineHeight / 2f - pinMarginBottom - 11);
             path.lineTo(mX, mY - mThumbLineHeight / 2f - pinMarginBottom);
             canvas.drawPath(path, mThumbPinBgPaint);
-            mPinColorBounds.set((int) (mX - maxHalfWidth), (int) (mY - mThumbLineHeight / 2f - pinMarginBottom - pinMaxHeight), (int) (mX + maxHalfWidth), (int) (mY - mThumbLineHeight / 2f - pinMarginBottom - 11));
+            //画圆角背景
+
+            if (leftX != rightX) {
+                if (rightX - leftX < maxHalfWidth * 2) {//左右有交叠
+                    if (mX == leftX) {//当前是左边
+                        centerX = mX - (maxHalfWidth - (rightX - leftX) / 2f);
+                    } else if (mX == rightX) {//当前是右边
+                        centerX = mX + (maxHalfWidth - (rightX - leftX) / 2f);
+                    }
+                }
+            }
+            mPinColorBounds.set((int) (centerX - maxHalfWidth), (int) (mY - mThumbLineHeight / 2f - pinMarginBottom - pinMaxHeight), (int) (centerX + maxHalfWidth), (int) (mY - mThumbLineHeight / 2f - pinMarginBottom - 11));
             canvas.drawRoundRect(mPinColorBounds, 4, 4, mThumbPinBgPaint);
         } else {
-            mPinBounds.set((int) (mX - maxHalfWidth), (int) (mY - mThumbLineHeight / 2f - pinMarginBottom - pinMaxHeight), (int) (mX + maxHalfWidth), (int) (mY - mThumbLineHeight / 2f - pinMarginBottom));
+            mPinBounds.set((int) (centerX - maxHalfWidth), (int) (mY - mThumbLineHeight / 2f - pinMarginBottom - pinMaxHeight), (int) (centerX + maxHalfWidth), (int) (mY - mThumbLineHeight / 2f - pinMarginBottom));
             mPinBg.setBounds(mPinBounds);
             mPinBg.draw(canvas);
         }
-        canvas.drawText(getText() == null ? "" : getText(), mX, mY - mThumbLineHeight / 2f - pinMarginBottom - pinTextPaddingBottom, mThumbPinTextPaint);
+        //画文字
+        canvas.drawText(getText() == null ? "" : getText(), centerX, mY - mThumbLineHeight / 2f - pinMarginBottom - pinTextPaddingBottom, mThumbPinTextPaint);
 
 
     }

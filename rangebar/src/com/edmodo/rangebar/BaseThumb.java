@@ -158,20 +158,20 @@ public abstract class BaseThumb {
      * @param canvas Canvas to draw on; should be the Canvas passed into {#link
      *               View#onDraw()}
      */
-    public void draw(Canvas canvas) {
+    public void draw(Canvas canvas, float leftX, float rightX) {
         // If a bitmap is to be printed. Determined by thumbRadius attribute.
         if (mUseBitmap) {
             final Bitmap bitmap = (mIsPressed) ? mImagePressed : mImageNormal;
-            drawByBitmap(canvas, bitmap, mIsPressed);
+            drawByBitmap(canvas, bitmap, leftX, rightX, mIsPressed);
         } else {
             // Otherwise use a circle to display.
-            drawByColor(canvas, mIsPressed);
+            drawByColor(canvas, leftX, rightX, mIsPressed);
         }
     }
 
-    protected abstract void drawByBitmap(Canvas canvas, Bitmap bitmap, boolean isPressed);
+    protected abstract void drawByBitmap(Canvas canvas, Bitmap bitmap, float leftX, float rightX, boolean isPressed);
 
-    protected abstract void drawByColor(Canvas canvas, boolean isPressed);
+    protected abstract void drawByColor(Canvas canvas, float leftX, float rightX, boolean isPressed);
 
     public int measureMinWidth() {
         return -1;
