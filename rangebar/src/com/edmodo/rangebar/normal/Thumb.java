@@ -114,8 +114,8 @@ class Thumb extends BaseThumb {
     @Override
     protected void drawByColor(Canvas canvas, int leftIndex, float leftX, int rightIndex, float rightX, boolean isPressed) {
         if (isPressed)
-            canvas.drawCircle(mX, mY, mThumbRadiusPx, mPaintPressed);
+            canvas.drawCircle(mX, mY, mThumbRadius, mPaintPressed);
         else
-            canvas.drawCircle(mX, mY, mThumbRadiusPx, mPaintNormal);
+            canvas.drawCircle(mX, mY, mThumbRadius, mPaintNormal);
     }
 }

@@ -23,7 +23,7 @@ public abstract class BaseThumb {
 
     // Sets the default values for radius, normal, pressed if circle is to be
     // drawn but no value is given.
-    protected static final float DEFAULT_THUMB_RADIUS_DP = 14;
+    protected static final float DEFAULT_THUMB_RADIUS_DP = 16;
 
     // Corresponds to android.R.color.holo_blue_light.
     protected static final int DEFAULT_THUMB_COLOR_NORMAL = 0xff33b5e5;
@@ -40,7 +40,7 @@ public abstract class BaseThumb {
     protected Paint mPaintPressed;
 
     // Radius of the new thumb if selected
-    protected float mThumbRadiusPx;
+    protected float mThumbRadius;
 
     // Toggle to select bitmap thumbImage or not
     protected boolean mUseBitmap;
@@ -58,7 +58,7 @@ public abstract class BaseThumb {
     // The current x-position of the thumb in the parent view.
     protected float mX;
 
-    public BaseThumb(Context ctx, float y, int thumbColorNormal, int thumbColorPressed, float thumbRadiusDP, int thumbImageNormal, int thumbImagePressed) {
+    public BaseThumb(Context ctx, float y, int thumbColorNormal, int thumbColorPressed, float thumbRadius, int thumbImageNormal, int thumbImagePressed) {
         mY = y;
         final Resources res = ctx.getResources();
         mImageNormal = BitmapFactory.decodeResource(res, thumbImageNormal);
@@ -74,14 +74,12 @@ public abstract class BaseThumb {
 
             // If one of the attributes are set, but the others aren't, set the
             // attributes to default
-            if (thumbRadiusDP == -1)
-                mThumbRadiusPx = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+            if (thumbRadius <= 0)
+                mThumbRadius = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                         DEFAULT_THUMB_RADIUS_DP,
                         res.getDisplayMetrics());
             else
-                mThumbRadiusPx = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-                        thumbRadiusDP,
-                        res.getDisplayMetrics());
+                mThumbRadius = thumbRadius;
 
             if (thumbColorNormal == -1)
                 mThumbColorNormal = DEFAULT_THUMB_COLOR_NORMAL;

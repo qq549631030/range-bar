@@ -26,13 +26,12 @@ public class CustomBar extends BaseBar {
 
     private IRangeBarFormatter scaleFormatter;
 
-    CustomBar(Context ctx, float x, float y, float length, float barBulge, int tickCount, float tickHeight, float barWeight, float tickWeight, int barColor, int tickColor, float tickPadding, float scaleTextSizeSp, int scaleTextColor) {
+    CustomBar(Context ctx, float x, float y, float length, float barBulge, int tickCount, float tickHeight, float barWeight, float tickWeight, int barColor, int tickColor, float tickPadding, float scaleTextSize, int scaleTextColor) {
         super(ctx, x, y, length, barBulge, tickCount, tickHeight, barWeight, tickWeight, barColor, tickColor);
         mScalePaint = new Paint();
         mScalePaint.setColor(scaleTextColor);
         mScalePaint.setAntiAlias(true);
         mScalePaint.setTextAlign(Paint.Align.CENTER);
-        float scaleTextSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, scaleTextSizeSp, ctx.getResources().getDisplayMetrics());
         mScalePaint.setTextSize(scaleTextSize);
         mTickPadding = tickPadding;
         mTickStartY = mY - mTickHeight - mTickPadding;

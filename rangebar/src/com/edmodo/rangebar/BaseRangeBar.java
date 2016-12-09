@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -24,39 +25,43 @@ public abstract class BaseRangeBar extends View {
     private static final String TAG = "RangeBar";
 
     // Default values for variables
-    private static final int DEFAULT_TICK_COUNT = 3;
-    private static final float DEFAULT_TICK_HEIGHT_PX = 48;
-    private static final float DEFAULT_BAR_BULGE_PX = 0;
-    private static final float DEFAULT_BAR_WEIGHT_PX = 2;
-    private static final float DEFAULT_TICK_WEIGHT_PX = 2;
+
+    private static final float DEFAULT_BAR_WEIGHT_DP = 2;
+    private static final float DEFAULT_BAR_BULGE_DP = 0;
     private static final int DEFAULT_BAR_COLOR = Color.DKGRAY;
+
+    private static final int DEFAULT_TICK_COUNT = 3;
+    private static final float DEFAULT_TICK_HEIGHT_DP = 16;
+    private static final float DEFAULT_TICK_WEIGHT_DP = 2;
     private static final int DEFAULT_TICK_COLOR = Color.LTGRAY;
-    private static final float DEFAULT_CONNECTING_LINE_WEIGHT_PX = 2;
+
+    private static final float DEFAULT_CONNECTING_LINE_WEIGHT_DP = 2;
+    private static final int DEFAULT_CONNECTING_LINE_COLOR = 0xff33b5e5;
+
     private static final int DEFAULT_THUMB_IMAGE_NORMAL = -1;
     private static final int DEFAULT_THUMB_IMAGE_PRESSED = -1;
-
-    // Corresponds to android.R.color.holo_blue_light.
-    private static final int DEFAULT_CONNECTING_LINE_COLOR = 0xff33b5e5;
 
     // Indicator value tells Thumb.java whether it should draw the circle or not
     private static final float DEFAULT_THUMB_RADIUS_DP = 12;
     private static final int DEFAULT_THUMB_COLOR_NORMAL = 0xff33b5e5;
     private static final int DEFAULT_THUMB_COLOR_PRESSED = Color.BLUE;
 
+    private float mBarWeight;
+    protected float mBarBulge;
+    private int mBarColor = DEFAULT_BAR_COLOR;
     // Instance variables for all of the customizable attributes
     private int mTickCount = DEFAULT_TICK_COUNT;
-    protected float mTickHeight = DEFAULT_TICK_HEIGHT_PX;
-    protected float mBarBulge = DEFAULT_BAR_BULGE_PX;
-    private float mBarWeight = DEFAULT_BAR_WEIGHT_PX;
-    private float mTickWeight = DEFAULT_TICK_WEIGHT_PX;
-    private int mBarColor = DEFAULT_BAR_COLOR;
+    protected float mTickHeight;
+    private float mTickWeight;
     private int mTickColor = DEFAULT_TICK_COLOR;
-    private float mConnectingLineWeight = DEFAULT_CONNECTING_LINE_WEIGHT_PX;
+
+    private float mConnectingLineWeight;
     private int mConnectingLineColor = DEFAULT_CONNECTING_LINE_COLOR;
+
     protected int mThumbImageNormal = DEFAULT_THUMB_IMAGE_NORMAL;
     protected int mThumbImagePressed = DEFAULT_THUMB_IMAGE_PRESSED;
 
-    private float mThumbRadiusDP = DEFAULT_THUMB_RADIUS_DP;
+    private float mThumbRadius;
     private int mThumbColorNormal = DEFAULT_THUMB_COLOR_NORMAL;
     private int mThumbColorPressed = DEFAULT_THUMB_COLOR_PRESSED;
 
@@ -116,7 +121,7 @@ public abstract class BaseRangeBar extends View {
         bundle.putInt("THUMB_IMAGE_NORMAL", mThumbImageNormal);
         bundle.putInt("THUMB_IMAGE_PRESSED", mThumbImagePressed);
 
-        bundle.putFloat("THUMB_RADIUS_DP", mThumbRadiusDP);
+        bundle.putFloat("THUMB_RADIUS_DP", mThumbRadius);
         bundle.putInt("THUMB_COLOR_NORMAL", mThumbColorNormal);
         bundle.putInt("THUMB_COLOR_PRESSED", mThumbColorPressed);
 
@@ -147,7 +152,7 @@ public abstract class BaseRangeBar extends View {
             mThumbImageNormal = bundle.getInt("THUMB_IMAGE_NORMAL");
             mThumbImagePressed = bundle.getInt("THUMB_IMAGE_PRESSED");
 
-            mThumbRadiusDP = bundle.getFloat("THUMB_RADIUS_DP");
+            mThumbRadius = bundle.getFloat("THUMB_RADIUS");
             mThumbColorNormal = bundle.getInt("THUMB_COLOR_NORMAL");
             mThumbColorPressed = bundle.getInt("THUMB_COLOR_PRESSED");
 
@@ -219,8 +224,8 @@ public abstract class BaseRangeBar extends View {
 
         // Create the two thumb objects.
         final float yPos = h / 2f;
-        mLeftThumb = createThumb(ctx, yPos, mThumbColorNormal, mThumbColorPressed, mThumbRadiusDP, mThumbImageNormal, mThumbImagePressed);
-        mRightThumb = createThumb(ctx, yPos, mThumbColorNormal, mThumbColorPressed, mThumbRadiusDP, mThumbImageNormal, mThumbImagePressed);
+        mLeftThumb = createThumb(ctx, yPos, mThumbColorNormal, mThumbColorPressed, mThumbRadius, mThumbImageNormal, mThumbImagePressed);
+        mRightThumb = createThumb(ctx, yPos, mThumbColorNormal, mThumbColorPressed, mThumbRadius, mThumbImageNormal, mThumbImagePressed);
 
         // Create the underlying bar.
         final float marginLeft = mLeftThumb.getHalfWidth();
@@ -447,7 +452,7 @@ public abstract class BaseRangeBar extends View {
      */
     public void setThumbRadius(float thumbRadius) {
 
-        mThumbRadiusDP = thumbRadius;
+        mThumbRadius = thumbRadius;
         createThumbs();
     }
 
@@ -550,36 +555,53 @@ public abstract class BaseRangeBar extends View {
         return mRightIndex;
     }
 
-    protected float getDefaultTickHeightPx() {
-        return DEFAULT_TICK_HEIGHT_PX;
+
+    protected float convertDp(float value) {
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, value, getContext().getResources().getDisplayMetrics());
     }
 
-    protected float getDefaultBarBulgePx() {
-        return DEFAULT_BAR_BULGE_PX;
+    protected float convertSp(float value) {
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, value, getContext().getResources().getDisplayMetrics());
     }
 
     protected float getDefaultBarWeightPx() {
-        return DEFAULT_BAR_WEIGHT_PX;
-    }
-
-    protected float getDefaultConnectingLineWeightPx() {
-        return DEFAULT_CONNECTING_LINE_WEIGHT_PX;
-    }
-
-    protected float getDefaultThumbRadiusDp() {
-        return DEFAULT_THUMB_RADIUS_DP;
-    }
-
-    protected float getDefaultTickWeightPx() {
-        return DEFAULT_TICK_WEIGHT_PX;
+        return convertDp(DEFAULT_BAR_WEIGHT_DP);
     }
 
     protected int getDefaultBarColor() {
         return DEFAULT_BAR_COLOR;
     }
 
+    protected float getDefaultBarBulgePx() {
+        return convertDp(DEFAULT_BAR_BULGE_DP);
+    }
+
+    protected int getDefaultTickCount() {
+        return DEFAULT_TICK_COUNT;
+    }
+
+    protected float getDefaultTickHeightPx() {
+        return convertDp(DEFAULT_TICK_HEIGHT_DP);
+    }
+
+    protected float getDefaultTickWeightPx() {
+        return convertDp(DEFAULT_TICK_WEIGHT_DP);
+    }
+
+    protected int getDefaultTickColor() {
+        return DEFAULT_TICK_COLOR;
+    }
+
+    protected float getDefaultConnectingLineWeightPx() {
+        return convertDp(DEFAULT_CONNECTING_LINE_WEIGHT_DP);
+    }
+
     protected int getDefaultConnectingLineColor() {
         return DEFAULT_CONNECTING_LINE_COLOR;
+    }
+
+    protected float getDefaultThumbRadiusPx() {
+        return convertDp(DEFAULT_THUMB_RADIUS_DP);
     }
 
     protected int getDefaultThumbColorNormal() {
@@ -596,14 +618,6 @@ public abstract class BaseRangeBar extends View {
 
     protected int getDefaultThumbImagePressed() {
         return DEFAULT_THUMB_IMAGE_PRESSED;
-    }
-
-    protected int getDefaultTickColor() {
-        return DEFAULT_TICK_COLOR;
-    }
-
-    protected int getDefaultTickCount() {
-        return DEFAULT_TICK_COUNT;
     }
 
     /**
@@ -651,7 +665,7 @@ public abstract class BaseRangeBar extends View {
                     getDefaultConnectingLineWeightPx());
             mConnectingLineColor = ta.getColor(R.styleable.BaseRangeBar_connectingLineColor,
                     getDefaultConnectingLineColor());
-            mThumbRadiusDP = ta.getDimension(R.styleable.BaseRangeBar_thumbRadius, getDefaultThumbRadiusDp());
+            mThumbRadius = ta.getDimension(R.styleable.BaseRangeBar_thumbRadius, getDefaultThumbRadiusPx());
             mThumbImageNormal = ta.getResourceId(R.styleable.BaseRangeBar_thumbImageNormal,
                     getDefaultThumbImageNormal());
             mThumbImagePressed = ta.getResourceId(R.styleable.BaseRangeBar_thumbImagePressed,
@@ -702,8 +716,8 @@ public abstract class BaseRangeBar extends View {
         Context ctx = getContext();
         float yPos = getYPos();
 
-        mLeftThumb = createThumb(ctx, yPos, mThumbColorNormal, mThumbColorPressed, mThumbRadiusDP, mThumbImageNormal, mThumbImagePressed);
-        mRightThumb = createThumb(ctx, yPos, mThumbColorNormal, mThumbColorPressed, mThumbRadiusDP, mThumbImageNormal, mThumbImagePressed);
+        mLeftThumb = createThumb(ctx, yPos, mThumbColorNormal, mThumbColorPressed, mThumbRadius, mThumbImageNormal, mThumbImagePressed);
+        mRightThumb = createThumb(ctx, yPos, mThumbColorNormal, mThumbColorPressed, mThumbRadius, mThumbImageNormal, mThumbImagePressed);
 
         float marginLeft = getMarginLeft();
         float barLength = getBarLength();
@@ -917,20 +931,6 @@ public abstract class BaseRangeBar extends View {
         }
     }
 
-
-    /**
-     * Set the value on the thumb pin, either from map or calculated from the tick intervals
-     * Integer check to format decimals as whole numbers
-     *
-     * @param tickIndex the index to set the value for
-     */
-    private String getPinValue(int tickIndex) {
-        if (mFormatter != null) {
-            return mFormatter.format(tickIndex);
-        }
-        return String.valueOf(tickIndex);
-    }
-
     // Inner Classes ///////////////////////////////////////////////////////////
 
     /**
@@ -938,8 +938,8 @@ public abstract class BaseRangeBar extends View {
      * listener will only be called when either thumb's index has changed - not
      * for every movement of the thumb.
      */
-    public static interface OnRangeBarChangeListener {
+    public interface OnRangeBarChangeListener {
 
-        public void onIndexChangeListener(BaseRangeBar rangeBar, int leftThumbIndex, int rightThumbIndex);
+        void onIndexChangeListener(BaseRangeBar rangeBar, int leftThumbIndex, int rightThumbIndex);
     }
 }

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 
 import com.edmodo.rangebar.BaseBar;
 import com.edmodo.rangebar.BaseConnectingLine;
@@ -20,51 +21,53 @@ import com.edmodo.rangebar.R;
 
 public class CustomRangeBar extends BaseRangeBar {
 
-    private static final float DEFAULT_BAR_BULGE_PX = 8;
-    private static final float DEFAULT_BAR_WEIGHT_PX = 8;
-    private static final float DEFAULT_TICK_WEIGHT_PX = 4;
+    private static final float DEFAULT_BAR_BULGE_DP = 4;
+    private static final float DEFAULT_BAR_WEIGHT_DP = 4;
     private static final int DEFAULT_BAR_COLOR = Color.LTGRAY;
+
     private static final int DEFAULT_TICK_COUNT = 11;
-    private static final float DEFAULT_TICK_HEIGHT_PX = 12;
+    private static final float DEFAULT_TICK_HEIGHT_DP = 6;
+    private static final float DEFAULT_TICK_WEIGHT_DP = 2;
+    private static final float DEFAULT_TICK_PADDING_DP = 5;
     private static final int DEFAULT_TICK_COLOR = Color.LTGRAY;
-    private static final float DEFAULT_CONNECTING_LINE_WEIGHT_PX = 8;
 
-
-    private static final float DEFAULT_TICK_PADDING_PX = 10;
     private static final float DEFAULT_SCALE_TEXT_SIZE_SP = 12;
     private static final int DEFAULT_SCALE_TEXT_COLOR = Color.WHITE;
-    private static final int DEFAULT_PIN_BG_COLOR = 0xff33b5e5;
-    private static final int DEFAULT_PIN_TEXT_COLOR = Color.WHITE;
-    private static final int DEFAULT_THUMB_LINE_COLOR = Color.CYAN;
+
+    private static final float DEFAULT_CONNECTING_LINE_WEIGHT_DP = 4;
+
     private static final int DEFAULT_PIN_BG_RES = 0;
-    private static final float DEFAULT_PIN_TEXT_PADDING_LEFT_PX = 6;
-    private static final float DEFAULT_PIN_TEXT_PADDING_TOP_PX = 6;
-    private static final float DEFAULT_PIN_TEXT_PADDING_RIGHT_PX = 6;
-    private static final float DEFAULT_PIN_TEXT_PADDING_BOTTOM_PX = 16;
-    private static final float DEFAULT_PIN_MARGIN_BOTTOM_PX = 20;
+    private static final int DEFAULT_PIN_BG_COLOR = 0xff33b5e5;
+    private static final float DEFAULT_PIN_TEXT_PADDING_LEFT_DP = 5;
+    private static final float DEFAULT_PIN_TEXT_PADDING_TOP_DP = 5;
+    private static final float DEFAULT_PIN_TEXT_PADDING_RIGHT_DP = 5;
+    private static final float DEFAULT_PIN_TEXT_PADDING_BOTTOM_DP = 5;
+    private static final float DEFAULT_PIN_MARGIN_BOTTOM_DP = 12;
     private static final float DEFAULT_PIN_TEXT_SIZE_SP = 12;
+    private static final int DEFAULT_PIN_TEXT_COLOR = Color.WHITE;
     private static final int DEFAULT_PIN_TEXT_LENGTH = 4;
 
-    private static final float DEFAULT_THUMB_LINE_HEIGHT_PX = 60;
-    private static final float DEFAULT_THUMB_LINE_WEIGHT_PX = 4;
+    private static final float DEFAULT_THUMB_LINE_HEIGHT_DP = 30;
+    private static final float DEFAULT_THUMB_LINE_WEIGHT_DP = 2;
+    private static final int DEFAULT_THUMB_LINE_COLOR = Color.CYAN;
 
-    private float mTickPadding = DEFAULT_TICK_PADDING_PX;
-    private float mScaleTextSizeSp = DEFAULT_SCALE_TEXT_SIZE_SP;
+    private float mTickPadding;
+    private float mScaleTextSize;
     private int mScaleTextColor = DEFAULT_SCALE_TEXT_COLOR;
 
     private int mPinBgRes = DEFAULT_PIN_BG_RES;
     private int mPinBgColor = DEFAULT_PIN_BG_COLOR;
-    private float mPinTextPaddingLeft = DEFAULT_PIN_TEXT_PADDING_LEFT_PX;
-    private float mPinTextPaddingTop = DEFAULT_PIN_TEXT_PADDING_TOP_PX;
-    private float mPinTextPaddingRight = DEFAULT_PIN_TEXT_PADDING_RIGHT_PX;
-    private float mPinTextPaddingBottom = DEFAULT_PIN_TEXT_PADDING_BOTTOM_PX;
-    private float mPinMarginBottom = DEFAULT_PIN_MARGIN_BOTTOM_PX;
-    private float mPinTextSizeSp = DEFAULT_PIN_TEXT_SIZE_SP;
+    private float mPinTextPaddingLeft;
+    private float mPinTextPaddingTop;
+    private float mPinTextPaddingRight;
+    private float mPinTextPaddingBottom;
+    private float mPinMarginBottom;
+    private float mPinTextSize;
     private int mPinTextColor = DEFAULT_PIN_TEXT_COLOR;
     private int maxPinTextLength = DEFAULT_PIN_TEXT_LENGTH;
 
-    private float mThumbLineHeight = DEFAULT_THUMB_LINE_HEIGHT_PX;
-    private float mThumbLineWeight = DEFAULT_THUMB_LINE_WEIGHT_PX;
+    private float mThumbLineHeight;
+    private float mThumbLineWeight;
     private int mThumbLineColor = DEFAULT_THUMB_LINE_COLOR;
 
     private IRangeBarFormatter scaleFormatter;
@@ -84,42 +87,38 @@ public class CustomRangeBar extends BaseRangeBar {
 
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.CustomRangeBar, 0, 0);
         try {
-            mTickPadding = ta.getDimension(R.styleable.CustomRangeBar_tickPadding, DEFAULT_TICK_PADDING_PX);
-            mScaleTextSizeSp = ta.getDimension(R.styleable.CustomRangeBar_scaleTextSize, DEFAULT_SCALE_TEXT_SIZE_SP);
-            mScaleTextColor = ta.getColor(R.styleable.CustomRangeBar_scaleTextColor, DEFAULT_SCALE_TEXT_COLOR);
+            mTickPadding = ta.getDimension(R.styleable.CustomRangeBar_tickPadding, getDefaultTickPaddingPx());
+            mScaleTextSize = ta.getDimension(R.styleable.CustomRangeBar_scaleTextSize, getDefaultScaleTextSizePx());
+            mScaleTextColor = ta.getColor(R.styleable.CustomRangeBar_scaleTextColor, getDefaultScaleTextColor());
 
-            mPinBgRes = ta.getResourceId(R.styleable.CustomRangeBar_pinBgRes, DEFAULT_PIN_BG_RES);
-            mPinBgColor = ta.getColor(R.styleable.CustomRangeBar_pinBgColor, DEFAULT_PIN_BG_COLOR);
-            mPinTextPaddingLeft = ta.getDimension(R.styleable.CustomRangeBar_pinTextPaddingLeft, DEFAULT_PIN_TEXT_PADDING_LEFT_PX);
-            mPinTextPaddingTop = ta.getDimension(R.styleable.CustomRangeBar_pinTextPaddingTop, DEFAULT_PIN_TEXT_PADDING_TOP_PX);
-            mPinTextPaddingRight = ta.getDimension(R.styleable.CustomRangeBar_pinTextPaddingRight, DEFAULT_PIN_TEXT_PADDING_RIGHT_PX);
-            mPinTextPaddingBottom = ta.getDimension(R.styleable.CustomRangeBar_pinTextPaddingBottom, DEFAULT_PIN_TEXT_PADDING_BOTTOM_PX);
-            mPinMarginBottom = ta.getDimension(R.styleable.CustomRangeBar_pinMarginBottom, DEFAULT_PIN_MARGIN_BOTTOM_PX);
-            mPinTextSizeSp = ta.getDimension(R.styleable.CustomRangeBar_pinTextSize, DEFAULT_PIN_TEXT_SIZE_SP);
-            mPinTextColor = ta.getColor(R.styleable.CustomRangeBar_pinTextColor, DEFAULT_PIN_TEXT_COLOR);
-            maxPinTextLength = ta.getInteger(R.styleable.CustomRangeBar_maxPinTextLength, DEFAULT_PIN_TEXT_LENGTH);
+            mPinBgRes = ta.getResourceId(R.styleable.CustomRangeBar_pinBgRes, getDefaultPinBgRes());
+            mPinBgColor = ta.getColor(R.styleable.CustomRangeBar_pinBgColor, getDefaultPinBgColor());
+            mPinTextPaddingLeft = ta.getDimension(R.styleable.CustomRangeBar_pinTextPaddingLeft, getDefaultPinTextPaddingLeftPx());
+            mPinTextPaddingTop = ta.getDimension(R.styleable.CustomRangeBar_pinTextPaddingTop, getDefaultPinTextPaddingTopPx());
+            mPinTextPaddingRight = ta.getDimension(R.styleable.CustomRangeBar_pinTextPaddingRight, getDefaultPinTextPaddingRightPx());
+            mPinTextPaddingBottom = ta.getDimension(R.styleable.CustomRangeBar_pinTextPaddingBottom, getDefaultPinTextPaddingBottomPx());
+            mPinMarginBottom = ta.getDimension(R.styleable.CustomRangeBar_pinMarginBottom, getDefaultPinMarginBottomPx());
+            mPinTextSize = ta.getDimension(R.styleable.CustomRangeBar_pinTextSize, getDefaultPinTextSizePx());
+            mPinTextColor = ta.getColor(R.styleable.CustomRangeBar_pinTextColor, getDefaultPinTextColor());
+            maxPinTextLength = ta.getInteger(R.styleable.CustomRangeBar_maxPinTextLength, getDefaultPinTextLength());
 
-            mThumbLineHeight = ta.getDimension(R.styleable.CustomRangeBar_thumbLineHeight, mThumbLineHeight);
-            mThumbLineWeight = ta.getDimension(R.styleable.CustomRangeBar_thumbLineWeight, DEFAULT_THUMB_LINE_WEIGHT_PX);
-            mThumbLineColor = ta.getColor(R.styleable.CustomRangeBar_thumbLineColor, DEFAULT_THUMB_LINE_COLOR);
+            mThumbLineHeight = ta.getDimension(R.styleable.CustomRangeBar_thumbLineHeight, getDefaultThumbLineHeightPx());
+            mThumbLineWeight = ta.getDimension(R.styleable.CustomRangeBar_thumbLineWeight, getDefaultThumbLineWeightPx());
+            mThumbLineColor = ta.getColor(R.styleable.CustomRangeBar_thumbLineColor, getDefaultThumbLineColor());
         } finally {
             ta.recycle();
         }
     }
 
-    @Override
-    public int getDefaultTickCount() {
-        return DEFAULT_TICK_COUNT;
-    }
 
     @Override
     public float getDefaultBarBulgePx() {
-        return DEFAULT_BAR_BULGE_PX;
+        return convertDp(DEFAULT_BAR_BULGE_DP);
     }
 
     @Override
     public float getDefaultBarWeightPx() {
-        return DEFAULT_BAR_WEIGHT_PX;
+        return convertDp(DEFAULT_BAR_WEIGHT_DP);
     }
 
     @Override
@@ -128,13 +127,22 @@ public class CustomRangeBar extends BaseRangeBar {
     }
 
     @Override
-    public float getDefaultTickWeightPx() {
-        return DEFAULT_TICK_WEIGHT_PX;
+    public int getDefaultTickCount() {
+        return DEFAULT_TICK_COUNT;
+    }
+
+    public float getDefaultTickPaddingPx() {
+        return convertDp(DEFAULT_TICK_PADDING_DP);
     }
 
     @Override
     public float getDefaultTickHeightPx() {
-        return DEFAULT_TICK_HEIGHT_PX;
+        return convertDp(DEFAULT_TICK_HEIGHT_DP);
+    }
+
+    @Override
+    public float getDefaultTickWeightPx() {
+        return convertDp(DEFAULT_TICK_WEIGHT_DP);
     }
 
     @Override
@@ -142,9 +150,69 @@ public class CustomRangeBar extends BaseRangeBar {
         return DEFAULT_TICK_COLOR;
     }
 
+    public float getDefaultScaleTextSizePx() {
+        return convertSp(DEFAULT_SCALE_TEXT_SIZE_SP);
+    }
+
+    public int getDefaultScaleTextColor() {
+        return DEFAULT_SCALE_TEXT_COLOR;
+    }
+
+    public int getDefaultPinBgRes() {
+        return DEFAULT_PIN_BG_RES;
+    }
+
+    public int getDefaultPinBgColor() {
+        return DEFAULT_PIN_BG_COLOR;
+    }
+
+    public float getDefaultPinTextPaddingLeftPx() {
+        return convertDp(DEFAULT_PIN_TEXT_PADDING_LEFT_DP);
+    }
+
+    public float getDefaultPinTextPaddingTopPx() {
+        return convertDp(DEFAULT_PIN_TEXT_PADDING_TOP_DP);
+    }
+
+    public float getDefaultPinTextPaddingRightPx() {
+        return convertDp(DEFAULT_PIN_TEXT_PADDING_RIGHT_DP);
+    }
+
+    public float getDefaultPinTextPaddingBottomPx() {
+        return convertDp(DEFAULT_PIN_TEXT_PADDING_BOTTOM_DP);
+    }
+
     @Override
     public float getDefaultConnectingLineWeightPx() {
-        return DEFAULT_CONNECTING_LINE_WEIGHT_PX;
+        return convertDp(DEFAULT_CONNECTING_LINE_WEIGHT_DP);
+    }
+
+    public float getDefaultPinMarginBottomPx() {
+        return convertDp(DEFAULT_PIN_MARGIN_BOTTOM_DP);
+    }
+
+    public float getDefaultPinTextSizePx() {
+        return convertSp(DEFAULT_PIN_TEXT_SIZE_SP);
+    }
+
+    public int getDefaultPinTextColor() {
+        return DEFAULT_PIN_TEXT_COLOR;
+    }
+
+    public int getDefaultPinTextLength() {
+        return DEFAULT_PIN_TEXT_LENGTH;
+    }
+
+    public float getDefaultThumbLineHeightPx() {
+        return convertDp(DEFAULT_THUMB_LINE_HEIGHT_DP);
+    }
+
+    public float getDefaultThumbLineWeightPx() {
+        return convertDp(DEFAULT_THUMB_LINE_WEIGHT_DP);
+    }
+
+    public int getDefaultThumbLineColor() {
+        return DEFAULT_THUMB_LINE_COLOR;
     }
 
     public void setScaleFormatter(IRangeBarFormatter scaleFormatter) {
@@ -168,7 +236,7 @@ public class CustomRangeBar extends BaseRangeBar {
 
     @Override
     protected BaseBar createBar(Context ctx, float marginLeft, float yPos, float barLength, float barBulge, int tickCount, float tickHeight, float barWeight, int barColor, float tickWeight, int tickColor) {
-        CustomBar bar = new CustomBar(ctx, marginLeft, yPos, barLength, barBulge, tickCount, tickHeight, barWeight, tickWeight, barColor, tickColor, mTickPadding, mScaleTextSizeSp, mScaleTextColor);
+        CustomBar bar = new CustomBar(ctx, marginLeft, yPos, barLength, barBulge, tickCount, tickHeight, barWeight, tickWeight, barColor, tickColor, mTickPadding, mScaleTextSize, mScaleTextColor);
         bar.setScaleFormatter(scaleFormatter);
         return bar;
     }
@@ -195,7 +263,7 @@ public class CustomRangeBar extends BaseRangeBar {
                         mPinTextPaddingRight,
                         mPinTextPaddingBottom,
                         mPinMarginBottom,
-                        mPinTextSizeSp,
+                        mPinTextSize,
                         mPinTextColor,
                         maxPinTextLength,
                         mThumbLineHeight,
