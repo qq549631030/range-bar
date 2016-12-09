@@ -7,6 +7,7 @@ import android.graphics.Rect;
 import android.util.TypedValue;
 
 import com.edmodo.rangebar.BaseBar;
+import com.edmodo.rangebar.IRangeBarFormatter;
 
 /**
  * 功能说明：
@@ -22,7 +23,8 @@ public class CustomBar extends BaseBar {
     private float mTickEndY;
 
     protected final float mTickPadding;
-    protected final int scaleInterval = 5;
+
+    private IRangeBarFormatter scaleFormatter;
 
     CustomBar(Context ctx, float x, float y, float length, float barBulge, int tickCount, float tickHeightDP, float barWeight, float tickWeight, int barColor, int tickColor, float tickPaddingDP, float scaleTextSizeSp, int scaleTextColor) {
         super(ctx, x, y, length, barBulge, tickCount, tickHeightDP, barWeight, tickWeight, barColor, tickColor);
@@ -37,6 +39,10 @@ public class CustomBar extends BaseBar {
                 ctx.getResources().getDisplayMetrics());
         mTickStartY = mY - mTickHeight - mTickPadding;
         mTickEndY = mY - mTickPadding;
+    }
+
+    public void setScaleFormatter(IRangeBarFormatter scaleFormatter) {
+        this.scaleFormatter = scaleFormatter;
     }
 
     @Override
@@ -64,17 +70,15 @@ public class CustomBar extends BaseBar {
     }
 
     protected void drawScales(Canvas canvas) {
-        if (scaleInterval > 0) {
-            for (int i = 0; i < mNumSegments; i++) {
-                if (i % scaleInterval == 0) {
-                    String scaleText = String.valueOf(i);
-                    if (formatter != null) {
-                        scaleText = formatter.format(i);
-                    }
-                    final float x = i * mTickDistance + mLeftX;
-                    canvas.drawText(scaleText, x, mY - mTickHeight - mTickPadding * 2,
-                            mScalePaint);
-                }
+        for (int i = 0; i < mNumSegments; i++) {
+            String scaleText = null;
+            if (scaleFormatter != null) {
+                scaleText = scaleFormatter.format(i);
+            }
+            if (scaleText != null) {
+                final float x = i * mTickDistance + mLeftX;
+                canvas.drawText(scaleText, x, mY - mTickHeight - mTickPadding * 2,
+                        mScalePaint);
             }
         }
     }

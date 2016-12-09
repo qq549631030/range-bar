@@ -9,6 +9,7 @@ import com.edmodo.rangebar.BaseBar;
 import com.edmodo.rangebar.BaseConnectingLine;
 import com.edmodo.rangebar.BaseRangeBar;
 import com.edmodo.rangebar.BaseThumb;
+import com.edmodo.rangebar.IRangeBarFormatter;
 import com.edmodo.rangebar.R;
 
 /**
@@ -66,6 +67,7 @@ public class CustomRangeBar extends BaseRangeBar {
     private float mThumbLineWeight = DEFAULT_THUMB_LINE_WEIGHT_PX;
     private int mThumbLineColor = DEFAULT_THUMB_LINE_COLOR;
 
+    private IRangeBarFormatter scaleFormatter;
 
     public CustomRangeBar(Context context) {
         this(context, null);
@@ -143,9 +145,18 @@ public class CustomRangeBar extends BaseRangeBar {
         return DEFAULT_CONNECTING_LINE_WEIGHT_PX;
     }
 
+    public void setScaleFormatter(IRangeBarFormatter scaleFormatter) {
+        this.scaleFormatter = scaleFormatter;
+        if (mBar != null) {
+            ((CustomBar) mBar).setScaleFormatter(scaleFormatter);
+        }
+        invalidate();
+    }
+
     @Override
     protected BaseBar createBar(Context ctx, float marginLeft, float yPos, float barLength, float barBulge, int tickCount, float tickHeightDP, float barWeight, int barColor, float tickWeight, int tickColor) {
         CustomBar bar = new CustomBar(ctx, marginLeft, yPos, barLength, barBulge, tickCount, tickHeightDP, barWeight, tickWeight, barColor, tickColor, mTickPaddingDP, mScaleTextSizeSp, mScaleTextColor);
+        bar.setScaleFormatter(scaleFormatter);
         return bar;
     }
 

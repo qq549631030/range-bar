@@ -324,6 +324,7 @@ public abstract class BaseRangeBar extends View {
         if (mBar != null) {
             mBar.setFormatter(formatter);
         }
+        invalidate();
     }
 
     /**
