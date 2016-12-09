@@ -12,6 +12,7 @@ import android.support.v4.content.ContextCompat;
 import android.util.TypedValue;
 
 import com.edmodo.rangebar.BaseThumb;
+import com.edmodo.rangebar.IRangeBarFormatter;
 
 /**
  * 功能说明：
@@ -60,6 +61,8 @@ public class CustomThumb extends BaseThumb {
     private final float maxHalfHeight;
 
     private final boolean pinBgUseColor;
+
+    private IRangeBarFormatter pinFormatter;
 
     public CustomThumb(Context ctx, float y, int thumbColorNormal, int thumbColorPressed, float thumbRadiusDP, int thumbImageNormal, int thumbImagePressed, int pinBgRes, int pinBgColor, float pinTextPaddingLeft, float pinTextPaddingTop, float pinTextPaddingRight, float pinTextPaddingBottom, float pinMarginBottom, float pinTextSizeSp, int pinTextColor, int maxPinTextLength, float thumbLineHeight, float mThumbLineWeight, int mThumbLineColor) {
         super(ctx, y, thumbColorNormal, thumbColorPressed, thumbRadiusDP, thumbImageNormal, thumbImagePressed);
@@ -135,25 +138,46 @@ public class CustomThumb extends BaseThumb {
         return false;
     }
 
+    public void setPinFormatter(IRangeBarFormatter pinFormatter) {
+        this.pinFormatter = pinFormatter;
+    }
+
     @Override
-    protected void drawByBitmap(Canvas canvas, Bitmap bitmap, float leftX, float rightX, boolean isPressed) {
-        drawPin(canvas, leftX, rightX);
+    protected void drawByBitmap(Canvas canvas, Bitmap bitmap, int leftIndex, float leftX, int rightIndex, float rightX, boolean isPressed) {
+        drawPin(canvas, leftIndex, leftX, rightIndex, rightX);
         drawLine(canvas);
         drawImage(canvas, bitmap, isPressed);
     }
 
     @Override
-    protected void drawByColor(Canvas canvas, float leftX, float rightX, boolean isPressed) {
-        drawPin(canvas, leftX, rightX);
+    protected void drawByColor(Canvas canvas, int leftIndex, float leftX, int rightIndex, float rightX, boolean isPressed) {
+        drawPin(canvas, leftIndex, leftX, rightIndex, rightX);
         drawLine(canvas);
         drawColor(canvas, isPressed);
     }
 
-    protected void drawPin(Canvas canvas, float leftX, float rightX) {
+    protected void drawPin(Canvas canvas, int leftIndex, float leftX, int rightIndex, float rightX) {
         float centerX = mX;
-        String pinText = getText() == null ? "" : getText();
-        mThumbPinTextPaint.getTextBounds(pinText, 0, pinText.length(), mPinTextBounds);
-        float textWidth = mPinTextBounds.width();
+        boolean currentIsLeft = true;
+        String pinTextLeft = "";
+        String pinTextRight = "";
+        if (pinFormatter != null) {
+            pinTextLeft = pinFormatter.format(leftIndex);
+            pinTextRight = pinFormatter.format(rightIndex);
+        }
+        mThumbPinTextPaint.getTextBounds(pinTextLeft, 0, pinTextLeft.length(), mPinTextBounds);
+        float leftTextWidth = mPinTextBounds.width();
+        mThumbPinTextPaint.getTextBounds(pinTextRight, 0, pinTextRight.length(), mPinTextBounds);
+        float rightTextWidth = mPinTextBounds.width();
+
+        float leftPinWidth = leftTextWidth + pinTextPaddingLeft + pinTextPaddingRight;
+        float rightPinWidth = rightTextWidth + pinTextPaddingLeft + pinTextPaddingRight;
+        String currentPinText = "";
+        if (mX == leftX) {
+            currentIsLeft = true;
+        } else if (mX == rightX) {
+            currentIsLeft = false;
+        }
         if (pinBgUseColor) {
             //画小三角
             Path path = new Path();
@@ -164,17 +188,14 @@ public class CustomThumb extends BaseThumb {
             canvas.drawPath(path, mThumbPinBgPaint);
             //画圆角背景
 
-            if (leftX != rightX) {
-                if (rightX - leftX < maxHalfWidth * 2) {//左右有交叠
-                    if (mX == leftX) {//当前是左边
-                        centerX = mX - (maxHalfWidth - (rightX - leftX) / 2f);
-                    } else if (mX == rightX) {//当前是右边
-                        centerX = mX + (maxHalfWidth - (rightX - leftX) / 2f);
-                    }
-                }
+            if (currentIsLeft) {
+                centerX = mX - (leftPinWidth / 2f - (rightX - leftX) / 2f);
+                mPinColorBounds.set((int) (centerX - leftPinWidth / 2f), (int) (mY - mThumbLineHeight / 2f - pinMarginBottom - pinMaxHeight), (int) (centerX + leftPinWidth / 2f), (int) (mY - mThumbLineHeight / 2f - pinMarginBottom - 11));
+            } else {
+                centerX = mX + (rightPinWidth / 2f - (rightX - leftX) / 2f);
+                mPinColorBounds.set((int) (centerX - rightPinWidth / 2f), (int) (mY - mThumbLineHeight / 2f - pinMarginBottom - pinMaxHeight), (int) (centerX + rightPinWidth / 2f), (int) (mY - mThumbLineHeight / 2f - pinMarginBottom - 11));
             }
 
-            mPinColorBounds.set((int) (centerX - textWidth / 2f - pinTextPaddingLeft), (int) (mY - mThumbLineHeight / 2f - pinMarginBottom - pinMaxHeight), (int) (centerX + textWidth / 2f + pinTextPaddingRight), (int) (mY - mThumbLineHeight / 2f - pinMarginBottom - 11));
             canvas.drawRoundRect(mPinColorBounds, 4, 4, mThumbPinBgPaint);
         } else {
             mPinBounds.set((int) (centerX - maxHalfWidth), (int) (mY - mThumbLineHeight / 2f - pinMarginBottom - pinMaxHeight), (int) (centerX + maxHalfWidth), (int) (mY - mThumbLineHeight / 2f - pinMarginBottom));
@@ -182,7 +203,7 @@ public class CustomThumb extends BaseThumb {
             mPinBg.draw(canvas);
         }
         //画文字
-        canvas.drawText(pinText, centerX, mY - mThumbLineHeight / 2f - pinMarginBottom - pinTextPaddingBottom, mThumbPinTextPaint);
+        canvas.drawText(currentPinText, centerX, mY - mThumbLineHeight / 2f - pinMarginBottom - pinTextPaddingBottom, mThumbPinTextPaint);
 
 
     }

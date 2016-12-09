@@ -58,8 +58,6 @@ public abstract class BaseThumb {
     // The current x-position of the thumb in the parent view.
     protected float mX;
 
-    protected String mText;
-
     public BaseThumb(Context ctx, float y, int thumbColorNormal, int thumbColorPressed, float thumbRadiusDP, int thumbImageNormal, int thumbImagePressed) {
         mY = y;
         final Resources res = ctx.getResources();
@@ -118,14 +116,6 @@ public abstract class BaseThumb {
         return mX;
     }
 
-    public String getText() {
-        return mText;
-    }
-
-    public void setText(String mText) {
-        this.mText = mText;
-    }
-
     public boolean isPressed() {
         return mIsPressed;
     }
@@ -155,20 +145,20 @@ public abstract class BaseThumb {
      * @param canvas Canvas to draw on; should be the Canvas passed into {#link
      *               View#onDraw()}
      */
-    public void draw(Canvas canvas, float leftX, float rightX) {
+    public void draw(Canvas canvas, int leftIndex, float leftX, int rightIndex, float rightX) {
         // If a bitmap is to be printed. Determined by thumbRadius attribute.
         if (mUseBitmap) {
             final Bitmap bitmap = (mIsPressed) ? mImagePressed : mImageNormal;
-            drawByBitmap(canvas, bitmap, leftX, rightX, mIsPressed);
+            drawByBitmap(canvas, bitmap, leftIndex, leftX, rightIndex, rightX, mIsPressed);
         } else {
             // Otherwise use a circle to display.
-            drawByColor(canvas, leftX, rightX, mIsPressed);
+            drawByColor(canvas, leftIndex, leftX, rightIndex, rightX, mIsPressed);
         }
     }
 
-    protected abstract void drawByBitmap(Canvas canvas, Bitmap bitmap, float leftX, float rightX, boolean isPressed);
+    protected abstract void drawByBitmap(Canvas canvas, Bitmap bitmap, int leftIndex, float leftX, int rightIndex, float rightX, boolean isPressed);
 
-    protected abstract void drawByColor(Canvas canvas, float leftX, float rightX, boolean isPressed);
+    protected abstract void drawByColor(Canvas canvas, int leftIndex, float leftX, int rightIndex, float rightX, boolean isPressed);
 
     public int measureMinWidth() {
         return -1;

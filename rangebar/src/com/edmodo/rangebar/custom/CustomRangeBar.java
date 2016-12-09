@@ -69,6 +69,8 @@ public class CustomRangeBar extends BaseRangeBar {
 
     private IRangeBarFormatter scaleFormatter;
 
+    private IRangeBarFormatter pinFormatter;
+
     public CustomRangeBar(Context context) {
         this(context, null);
     }
@@ -153,6 +155,17 @@ public class CustomRangeBar extends BaseRangeBar {
         invalidate();
     }
 
+    public void setPinFormatter(IRangeBarFormatter pinFormatter) {
+        this.pinFormatter = pinFormatter;
+        if (mLeftThumb != null) {
+            ((CustomThumb) mLeftThumb).setPinFormatter(pinFormatter);
+        }
+        if (mRightThumb != null) {
+            ((CustomThumb) mRightThumb).setPinFormatter(pinFormatter);
+        }
+        invalidate();
+    }
+
     @Override
     protected BaseBar createBar(Context ctx, float marginLeft, float yPos, float barLength, float barBulge, int tickCount, float tickHeight, float barWeight, int barColor, float tickWeight, int tickColor) {
         CustomBar bar = new CustomBar(ctx, marginLeft, yPos, barLength, barBulge, tickCount, tickHeight, barWeight, tickWeight, barColor, tickColor, mTickPadding, mScaleTextSizeSp, mScaleTextColor);
@@ -167,25 +180,28 @@ public class CustomRangeBar extends BaseRangeBar {
 
     @Override
     protected BaseThumb createThumb(Context ctx, float yPos, int thumbColorNormal, int thumbColorPressed, float thumbRadiusDP, int thumbImageNormal, int thumbImagePressed) {
-        return new CustomThumb(ctx,
-                yPos,
-                thumbColorNormal,
-                thumbColorPressed,
-                thumbRadiusDP,
-                thumbImageNormal,
-                thumbImagePressed,
-                mPinBgRes,
-                mPinBgColor,
-                mPinTextPaddingLeft,
-                mPinTextPaddingTop,
-                mPinTextPaddingRight,
-                mPinTextPaddingBottom,
-                mPinMarginBottom,
-                mPinTextSizeSp,
-                mPinTextColor,
-                maxPinTextLength,
-                mThumbLineHeight,
-                mThumbLineWeight,
-                mThumbLineColor);
+        CustomThumb thumb =
+                new CustomThumb(ctx,
+                        yPos,
+                        thumbColorNormal,
+                        thumbColorPressed,
+                        thumbRadiusDP,
+                        thumbImageNormal,
+                        thumbImagePressed,
+                        mPinBgRes,
+                        mPinBgColor,
+                        mPinTextPaddingLeft,
+                        mPinTextPaddingTop,
+                        mPinTextPaddingRight,
+                        mPinTextPaddingBottom,
+                        mPinMarginBottom,
+                        mPinTextSizeSp,
+                        mPinTextColor,
+                        maxPinTextLength,
+                        mThumbLineHeight,
+                        mThumbLineWeight,
+                        mThumbLineColor);
+        thumb.setPinFormatter(pinFormatter);
+        return thumb;
     }
 }

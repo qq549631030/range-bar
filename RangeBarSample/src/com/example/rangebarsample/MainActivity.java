@@ -134,6 +134,12 @@ public class MainActivity extends Activity implements ColorPickerDialog.OnColorC
                 return null;
             }
         });
+        rangebar.setPinFormatter(new IRangeBarFormatter() {
+            @Override
+            public String format(int tickIndex) {
+                return String.valueOf(tickIndex * 10) + "%";
+            }
+        });
         // Setting Index Values -------------------------------
 
         // Gets the index value TextViews

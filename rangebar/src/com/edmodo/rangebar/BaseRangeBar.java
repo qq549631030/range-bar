@@ -67,8 +67,8 @@ public abstract class BaseRangeBar extends View {
     private int mDefaultWidth = 500;
     private int mDefaultHeight = 100;
 
-    private BaseThumb mLeftThumb;
-    private BaseThumb mRightThumb;
+    protected BaseThumb mLeftThumb;
+    protected BaseThumb mRightThumb;
     protected BaseBar mBar;
     private BaseConnectingLine mConnectingLine;
 
@@ -230,9 +230,7 @@ public abstract class BaseRangeBar extends View {
         // Initialize thumbs to the desired indices
 
         mLeftThumb.setX(marginLeft + mBarBulge + (mLeftIndex / (float) (mTickCount - 1)) * (barLength - mBarBulge * 2f));
-        mLeftThumb.setText(getPinValue(mLeftIndex));
         mRightThumb.setX(marginLeft + mBarBulge + (mRightIndex / (float) (mTickCount - 1)) * (barLength - mBarBulge * 2f));
-        mRightThumb.setText(getPinValue(mRightIndex));
 
         // Set the thumb indices.
         final int newLeftIndex = mBar.getNearestTickIndex(mLeftThumb);
@@ -262,8 +260,8 @@ public abstract class BaseRangeBar extends View {
 
         mConnectingLine.draw(canvas, mLeftThumb, mRightThumb);
 
-        mLeftThumb.draw(canvas, mLeftThumb.getX(), mRightThumb.getX());
-        mRightThumb.draw(canvas, mLeftThumb.getX(), mRightThumb.getX());
+        mLeftThumb.draw(canvas, mLeftIndex, mLeftThumb.getX(), mRightIndex, mRightThumb.getX());
+        mRightThumb.draw(canvas, mLeftIndex, mLeftThumb.getX(), mRightIndex, mRightThumb.getX());
 
     }
 
@@ -711,9 +709,7 @@ public abstract class BaseRangeBar extends View {
         float barLength = getBarLength();
         // Initialize thumbs to the desired indices
         mLeftThumb.setX(marginLeft + mBarBulge + (mLeftIndex / (float) (mTickCount - 1)) * (barLength - mBarBulge * 2f));
-        mLeftThumb.setText(getPinValue(mLeftIndex));
         mRightThumb.setX(marginLeft + mBarBulge + (mRightIndex / (float) (mTickCount - 1)) * (barLength - mBarBulge * 2f));
-        mRightThumb.setText(getPinValue(mRightIndex));
         invalidate();
     }
 
@@ -870,8 +866,6 @@ public abstract class BaseRangeBar extends View {
 
             mLeftIndex = newLeftIndex;
             mRightIndex = newRightIndex;
-            mLeftThumb.setText(getPinValue(mLeftIndex));
-            mRightThumb.setText(getPinValue(mRightIndex));
             if (mListener != null) {
                 mListener.onIndexChangeListener(this, mLeftIndex, mRightIndex);
             }
@@ -901,8 +895,6 @@ public abstract class BaseRangeBar extends View {
 
         final float nearestTickX = mBar.getNearestTickCoordinate(thumb);
         thumb.setX(nearestTickX);
-        int tickIndex = mBar.getNearestTickIndex(thumb);
-        thumb.setText(getPinValue(tickIndex));
         thumb.release();
         invalidate();
     }
