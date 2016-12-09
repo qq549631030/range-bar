@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.util.Log;
 import android.util.TypedValue;
 
 /**
@@ -67,7 +66,7 @@ public abstract class BaseThumb {
         mImageNormal = BitmapFactory.decodeResource(res, thumbImageNormal);
         mImagePressed = BitmapFactory.decodeResource(res, thumbImagePressed);
         // If any of the attributes are set, toggle bitmap off
-        if (thumbRadiusDP == -1 && thumbColorNormal == -1 && thumbColorPressed == -1) {
+        if (mImageNormal != null && mImagePressed != null) {
 
             mUseBitmap = true;
 

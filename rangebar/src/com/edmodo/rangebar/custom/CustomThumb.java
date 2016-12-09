@@ -29,6 +29,8 @@ public class CustomThumb extends BaseThumb {
 
     private RectF mPinColorBounds = new RectF();
 
+    private Rect mPinTextBounds = new Rect();
+
     private final float pinTextPaddingLeft;
 
     private final float pinTextPaddingTop;
@@ -59,7 +61,7 @@ public class CustomThumb extends BaseThumb {
 
     private final boolean pinBgUseColor;
 
-    public CustomThumb(Context ctx, float y, int thumbColorNormal, int thumbColorPressed, float thumbRadiusDP, int thumbImageNormal, int thumbImagePressed, int pinBgRes, int pinBgColor, float pinTextPaddingLeftDp, float pinTextPaddingTopDp, float pinTextPaddingRightDp, float pinTextPaddingBottomDp, float pinMarginBottomDp, float pinTextSizeSp, int pinTextColor, int maxPinTextLength, float thumbLineHeight, float mThumbLineWeight, int mThumbLineColor) {
+    public CustomThumb(Context ctx, float y, int thumbColorNormal, int thumbColorPressed, float thumbRadiusDP, int thumbImageNormal, int thumbImagePressed, int pinBgRes, int pinBgColor, float pinTextPaddingLeft, float pinTextPaddingTop, float pinTextPaddingRight, float pinTextPaddingBottom, float pinMarginBottom, float pinTextSizeSp, int pinTextColor, int maxPinTextLength, float thumbLineHeight, float mThumbLineWeight, int mThumbLineColor) {
         super(ctx, y, thumbColorNormal, thumbColorPressed, thumbRadiusDP, thumbImageNormal, thumbImagePressed);
 
         if (pinBgRes > 0) {
@@ -70,11 +72,11 @@ public class CustomThumb extends BaseThumb {
             pinBgUseColor = true;
         }
 
-        this.pinTextPaddingLeft = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, pinTextPaddingLeftDp, ctx.getResources().getDisplayMetrics());
-        this.pinTextPaddingTop = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, pinTextPaddingTopDp, ctx.getResources().getDisplayMetrics());
-        this.pinTextPaddingRight = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, pinTextPaddingRightDp, ctx.getResources().getDisplayMetrics());
-        this.pinTextPaddingBottom = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, pinTextPaddingBottomDp, ctx.getResources().getDisplayMetrics());
-        this.pinMarginBottom = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, pinMarginBottomDp, ctx.getResources().getDisplayMetrics());
+        this.pinTextPaddingLeft = pinTextPaddingLeft;
+        this.pinTextPaddingTop = pinTextPaddingTop;
+        this.pinTextPaddingRight = pinTextPaddingRight;
+        this.pinTextPaddingBottom = pinTextPaddingBottom;
+        this.pinMarginBottom = pinMarginBottom;
         float pinTextSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, pinTextSizeSp, ctx.getResources().getDisplayMetrics());
 
         this.mThumbLineHeight = thumbLineHeight;
@@ -126,7 +128,7 @@ public class CustomThumb extends BaseThumb {
 
     @Override
     public boolean isInTargetZone(float x, float y) {
-        float thumbHeight = mImageNormal != null ? mImageNormal.getHeight() : mThumbRadiusPx;
+        float thumbHeight = mImageNormal != null ? mImageNormal.getHeight() : mThumbRadiusPx * 2;
         if (Math.abs(x - mX) <= maxHalfWidth && y >= mY - mThumbLineHeight / 2f && y <= mY + mThumbLineHeight / 2f + thumbHeight) {
             return true;
         }
@@ -149,6 +151,9 @@ public class CustomThumb extends BaseThumb {
 
     protected void drawPin(Canvas canvas, float leftX, float rightX) {
         float centerX = mX;
+        String pinText = getText() == null ? "" : getText();
+        mThumbPinTextPaint.getTextBounds(pinText, 0, pinText.length(), mPinTextBounds);
+        float textWidth = mPinTextBounds.width();
         if (pinBgUseColor) {
             //画小三角
             Path path = new Path();
@@ -168,7 +173,8 @@ public class CustomThumb extends BaseThumb {
                     }
                 }
             }
-            mPinColorBounds.set((int) (centerX - maxHalfWidth), (int) (mY - mThumbLineHeight / 2f - pinMarginBottom - pinMaxHeight), (int) (centerX + maxHalfWidth), (int) (mY - mThumbLineHeight / 2f - pinMarginBottom - 11));
+
+            mPinColorBounds.set((int) (centerX - textWidth / 2f - pinTextPaddingLeft), (int) (mY - mThumbLineHeight / 2f - pinMarginBottom - pinMaxHeight), (int) (centerX + textWidth / 2f + pinTextPaddingRight), (int) (mY - mThumbLineHeight / 2f - pinMarginBottom - 11));
             canvas.drawRoundRect(mPinColorBounds, 4, 4, mThumbPinBgPaint);
         } else {
             mPinBounds.set((int) (centerX - maxHalfWidth), (int) (mY - mThumbLineHeight / 2f - pinMarginBottom - pinMaxHeight), (int) (centerX + maxHalfWidth), (int) (mY - mThumbLineHeight / 2f - pinMarginBottom));
@@ -176,7 +182,7 @@ public class CustomThumb extends BaseThumb {
             mPinBg.draw(canvas);
         }
         //画文字
-        canvas.drawText(getText() == null ? "" : getText(), centerX, mY - mThumbLineHeight / 2f - pinMarginBottom - pinTextPaddingBottom, mThumbPinTextPaint);
+        canvas.drawText(pinText, centerX, mY - mThumbLineHeight / 2f - pinMarginBottom - pinTextPaddingBottom, mThumbPinTextPaint);
 
 
     }

@@ -8,11 +8,8 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
-
-import com.edmodo.rangebar.normal.ConnectingLine;
 
 /**
  * 功能说明：
@@ -531,6 +528,10 @@ public abstract class BaseRangeBar extends View {
 
         invalidate();
         requestLayout();
+    }
+
+    public int getTickCount() {
+        return mTickCount;
     }
 
     /**

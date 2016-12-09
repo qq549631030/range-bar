@@ -26,17 +26,15 @@ public class CustomBar extends BaseBar {
 
     private IRangeBarFormatter scaleFormatter;
 
-    CustomBar(Context ctx, float x, float y, float length, float barBulge, int tickCount, float tickHeightDP, float barWeight, float tickWeight, int barColor, int tickColor, float tickPaddingDP, float scaleTextSizeSp, int scaleTextColor) {
-        super(ctx, x, y, length, barBulge, tickCount, tickHeightDP, barWeight, tickWeight, barColor, tickColor);
+    CustomBar(Context ctx, float x, float y, float length, float barBulge, int tickCount, float tickHeight, float barWeight, float tickWeight, int barColor, int tickColor, float tickPadding, float scaleTextSizeSp, int scaleTextColor) {
+        super(ctx, x, y, length, barBulge, tickCount, tickHeight, barWeight, tickWeight, barColor, tickColor);
         mScalePaint = new Paint();
         mScalePaint.setColor(scaleTextColor);
         mScalePaint.setAntiAlias(true);
         mScalePaint.setTextAlign(Paint.Align.CENTER);
         float scaleTextSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, scaleTextSizeSp, ctx.getResources().getDisplayMetrics());
         mScalePaint.setTextSize(scaleTextSize);
-        mTickPadding = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-                tickPaddingDP,
-                ctx.getResources().getDisplayMetrics());
+        mTickPadding = tickPadding;
         mTickStartY = mY - mTickHeight - mTickPadding;
         mTickEndY = mY - mTickPadding;
     }
@@ -70,7 +68,7 @@ public class CustomBar extends BaseBar {
     }
 
     protected void drawScales(Canvas canvas) {
-        for (int i = 0; i < mNumSegments; i++) {
+        for (int i = 0; i <= mNumSegments; i++) {
             String scaleText = null;
             if (scaleFormatter != null) {
                 scaleText = scaleFormatter.format(i);

@@ -39,7 +39,7 @@ public class MainActivity extends Activity implements ColorPickerDialog.OnColorC
     private int mThumbColorPressed = DEFAULT_THUMB_COLOR_PRESSED;
 
     // Initializes the RangeBar in the application
-    private BaseRangeBar rangebar;
+    private CustomRangeBar rangebar;
 
     // Saves the state upon rotating the screen/restarting the activity
     @Override
@@ -68,13 +68,7 @@ public class MainActivity extends Activity implements ColorPickerDialog.OnColorC
         colorChanged(Component.THUMB_COLOR_PRESSED, mThumbColorPressed);
 
         // Gets the RangeBar
-        rangebar = (RangeBar) findViewById(R.id.rangebar1);
-        rangebar.setFormatter(new IRangeBarFormatter() {
-            @Override
-            public String format(int tickIndex) {
-                return String.valueOf(tickIndex * 5) + "%";
-            }
-        });
+        rangebar = (CustomRangeBar) findViewById(R.id.rangebar1);
         // Gets the index value TextViews
         final TextView leftIndexValue = (TextView) findViewById(R.id.leftIndexValue);
         final TextView rightIndexValue = (TextView) findViewById(R.id.rightIndexValue);
@@ -123,16 +117,21 @@ public class MainActivity extends Activity implements ColorPickerDialog.OnColorC
         thumbColorPressed.setTextColor(HOLO_BLUE);
 
         // Gets the RangeBar
-        rangebar = (BaseRangeBar) findViewById(R.id.rangebar1);
+        rangebar = (CustomRangeBar) findViewById(R.id.rangebar1);
 
-        ((CustomRangeBar) rangebar).setFormatter(new IRangeBarFormatter() {
+        rangebar.setFormatter(new IRangeBarFormatter() {
             @Override
             public String format(int tickIndex) {
-                if (tickIndex == 21) {
-                    return "不限";
-                } else {
+                return String.valueOf(tickIndex * 10) + "%";
+            }
+        });
+        rangebar.setScaleFormatter(new IRangeBarFormatter() {
+            @Override
+            public String format(int tickIndex) {
+                if (tickIndex % 5 == 0) {
                     return String.valueOf(tickIndex * 10) + "%";
                 }
+                return null;
             }
         });
         // Setting Index Values -------------------------------
