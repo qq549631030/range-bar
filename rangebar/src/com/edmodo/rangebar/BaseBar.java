@@ -3,7 +3,6 @@ package com.edmodo.rangebar;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.util.TypedValue;
 
 /**
  * 功能说明：
@@ -32,8 +31,6 @@ public class BaseBar {
     protected float mTickDistance;
 
     protected final float mTickHeight;
-
-    protected IRangeBarFormatter formatter;
 
     // Constructor /////////////////////////////////////////////////////////////
 
@@ -77,10 +74,6 @@ public class BaseBar {
 
     protected void initTickPaint(Paint paint) {
 
-    }
-
-    public void setFormatter(IRangeBarFormatter formatter) {
-        this.formatter = formatter;
     }
 
     public void draw(Canvas canvas) {

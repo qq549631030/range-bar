@@ -14,9 +14,7 @@
 package com.edmodo.rangebar.normal;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Canvas;
-import android.graphics.Paint;
 
 import com.edmodo.rangebar.BaseConnectingLine;
 import com.edmodo.rangebar.BaseThumb;

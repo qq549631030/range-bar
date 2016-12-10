@@ -119,12 +119,6 @@ public class MainActivity extends Activity implements ColorPickerDialog.OnColorC
         // Gets the RangeBar
         rangebar = (CustomRangeBar) findViewById(R.id.rangebar1);
 
-        rangebar.setFormatter(new IRangeBarFormatter() {
-            @Override
-            public String format(int tickIndex) {
-                return String.valueOf(tickIndex * 10) + "%";
-            }
-        });
         rangebar.setScaleFormatter(new IRangeBarFormatter() {
             @Override
             public String format(int tickIndex) {

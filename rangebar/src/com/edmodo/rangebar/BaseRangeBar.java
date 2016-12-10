@@ -79,10 +79,17 @@ public abstract class BaseRangeBar extends View {
 
     private OnRangeBarChangeListener mListener;
 
-    private IRangeBarFormatter mFormatter;
-
     private int mLeftIndex = 0;
     private int mRightIndex = mTickCount - 1;
+
+    //Used for ignoring vertical moves
+    private int mDiffX;
+
+    private int mDiffY;
+
+    private float mLastX;
+
+    private float mLastY;
 
 
     // Constructors ////////////////////////////////////////////////////////////
@@ -231,7 +238,6 @@ public abstract class BaseRangeBar extends View {
         final float marginLeft = mLeftThumb.getHalfWidth();
         final float barLength = w - 2 * marginLeft;
         mBar = createBar(ctx, marginLeft, yPos, barLength, mBarBulge, mTickCount, mTickHeight, mBarWeight, mBarColor, mTickWeight, mTickColor);
-        mBar.setFormatter(mFormatter);
         // Initialize thumbs to the desired indices
 
         mLeftThumb.setX(marginLeft + mBarBulge + (mLeftIndex / (float) (mTickCount - 1)) * (barLength - mBarBulge * 2f));
@@ -281,6 +287,11 @@ public abstract class BaseRangeBar extends View {
         switch (event.getAction()) {
 
             case MotionEvent.ACTION_DOWN:
+                mDiffX = 0;
+                mDiffY = 0;
+
+                mLastX = event.getX();
+                mLastY = event.getY();
                 onActionDown(event.getX(), event.getY());
                 return true;
 
@@ -293,6 +304,20 @@ public abstract class BaseRangeBar extends View {
             case MotionEvent.ACTION_MOVE:
                 onActionMove(event.getX());
                 this.getParent().requestDisallowInterceptTouchEvent(true);
+                final float curX = event.getX();
+                final float curY = event.getY();
+                mDiffX += Math.abs(curX - mLastX);
+                mDiffY += Math.abs(curY - mLastY);
+                mLastX = curX;
+                mLastY = curY;
+
+                if (mDiffX < mDiffY) {
+                    //vertical touch
+                    getParent().requestDisallowInterceptTouchEvent(false);
+                    return false;
+                } else {
+                    //horizontal touch (do nothing as it is needed for RangeBar)
+                }
                 return true;
 
             default:
@@ -311,20 +336,6 @@ public abstract class BaseRangeBar extends View {
      */
     public void setOnRangeBarChangeListener(OnRangeBarChangeListener listener) {
         mListener = listener;
-    }
-
-    /**
-     * Sets a listener to modify the text
-     *
-     * @param formatter the RangeBar pin text notification listener; null to remove any
-     *                  existing listener
-     */
-    public void setFormatter(IRangeBarFormatter formatter) {
-        this.mFormatter = formatter;
-        if (mBar != null) {
-            mBar.setFormatter(formatter);
-        }
-        invalidate();
     }
 
     /**
@@ -690,7 +701,6 @@ public abstract class BaseRangeBar extends View {
      */
     protected void createBar() {
         mBar = createBar(getContext(), getMarginLeft(), getYPos(), getBarLength(), mBarBulge, mTickCount, mTickHeight, mBarWeight, mBarColor, mTickWeight, mTickColor);
-        mBar.setFormatter(mFormatter);
         invalidate();
     }
 
