@@ -834,8 +834,15 @@ public abstract class BaseRangeBar extends View {
 
             float leftThumbXDistance = Math.abs(mLeftThumb.getX() - x);
             float rightThumbXDistance = Math.abs(mRightThumb.getX() - x);
-
-            if (leftThumbXDistance < rightThumbXDistance) {
+            if (leftThumbXDistance == rightThumbXDistance) {
+                if (x <= mLeftThumb.getX()) {
+                    mLeftThumb.setX(x);
+                    releaseThumb(mLeftThumb);
+                } else {
+                    mRightThumb.setX(x);
+                    releaseThumb(mRightThumb);
+                }
+            } else if (leftThumbXDistance < rightThumbXDistance) {
                 mLeftThumb.setX(x);
                 releaseThumb(mLeftThumb);
             } else {
